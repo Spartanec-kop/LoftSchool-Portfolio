@@ -10,7 +10,12 @@ html(lang="en")
   body
     .wrapper
       .maincontent
-      h1 Hello world!!!
+        .welcome         
+          //- img.paralax(src="content/MuntainNoParalax.png")
+          +image('content/MuntainNoParalax.png', 'paralax')
+          include ./section/header
+          .section.section1
+          .section.section2
         //- +image('content/user.jpg', 'user-pic')
         //- +icon('link', 'link-class')
         //- .icon-bg

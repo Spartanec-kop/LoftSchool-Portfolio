@@ -1,0 +1,51 @@
+.header, .header__navigate, .header__socials{
+    display: flex;
+}
+
+.header{
+    justify-content: space-around;
+    align-items:center;
+    height:60px;   
+}
+
+.header__navigate{
+    justify-content: space-between;
+    width:90vh;
+    height:100%;
+}
+
+.header__socials{
+    justify-content: space-between;
+    width:30vh;
+}
+
+.socials__link{
+    width:25px;
+    height:30px;
+    
+}
+.social-icon{
+    &:hover {
+        fill: $links-color;
+    }
+}
+
+.header__navigate__item{   
+    height: 100%;
+    display: table;
+
+    &:hover {
+        border-bottom: 2px solid $links-color;
+        color: $links-color
+    }
+}
+
+.header__navigate__link{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.header__my-link{
+    font-weight: 900;
+    font-size: 25px;
+}

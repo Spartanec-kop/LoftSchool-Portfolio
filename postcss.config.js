@@ -26,6 +26,7 @@ module.exports = {
       rootValue: 16,
       propList: ["*", "!*border*"],
       selectorBlackList: [/^html$/]
-    })
+    }),
+    require("math-calc")
   ]
 };
