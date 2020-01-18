@@ -12,8 +12,17 @@ html(lang="en")
       .maincontent
         .welcome         
           //- img.paralax(src="content/MuntainNoParalax.png")
-          +image('content/MuntainNoParalax.png', 'paralax')
+          .border
+            +image('content/MuntainNoParalax.png', 'paralax')
+            .triangles
+                svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                  polygon(points="0,0 0,100 1000,100")
+                svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                  polygon(points="0,100 1000,100 1000,0")
           .container
-            include ./section/section1
-            include ./section/section2
-            include ./section/section3
+            section
+              include ./section/section1
+            section
+              include ./section/section2           
+            section
+              include ./section/section3
