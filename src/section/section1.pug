@@ -1,9 +1,17 @@
+
 .fullscreen-section.section1
-    .section1__label 
-        span Личный сайт
-        br 
-        span веб разработчика
-    .section1__name 
-        span Павел 
-        br
-        span Варнавский
+    include ./header
+    .section1__body
+        .section1__label 
+            span Личный сайт
+            br 
+            span веб разработчика
+        .section1__name 
+            span Павел 
+            br
+            span Варнавский
+    .section1.scroll 
+        .scroll__label Скролл
+        .scroll_icon
+            svg.scroll__icon__svg
+                use(xlink:href="./sprite.svg#scroll")        
