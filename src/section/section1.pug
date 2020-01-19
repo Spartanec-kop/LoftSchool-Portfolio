@@ -1,5 +1,5 @@
 
-.fullscreen-section.section1
+.fullscreen-section.section1#section1
     include ./header
     .section1__body
         .section1__label 
@@ -13,5 +13,6 @@
     .section1.scroll 
         .scroll__label Скролл
         .scroll_icon
-            svg.scroll__icon__svg
-                use(xlink:href="./sprite.svg#scroll")        
+            a.scroll-link(href='#section2')
+                svg.scroll__icon__svg
+                    use(xlink:href="./sprite.svg#scroll")        
