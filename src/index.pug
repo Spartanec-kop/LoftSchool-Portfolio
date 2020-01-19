@@ -19,14 +19,21 @@ html(lang="en")
                   polygon(points="0,0 0,100 1000,100")
                 svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
                   polygon(points="0,100 1000,100 1000,0")
-          .container
-            section
-              include ./section/section1
-            section
-              include ./section/section2           
-            section
-              include ./section/section3
-            section
-              include ./section/section4
-            section
-              include ./section/section5
+          section
+            include ./section/section1
+          section
+            include ./section/section2           
+          section
+            include ./section/section3
+          section
+            include ./section/section4
+          section  
+          .border-budda
+            .budda
+              +image('content/Budda.jpg', 'budda-img')
+              .triangles-budda
+                svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                  polygon(points="0,0 1000,100 1000,0")
+                svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                  polygon(points="0,0 0,100 1000,0")          
+            include ./section/section5
