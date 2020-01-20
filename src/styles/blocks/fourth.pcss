@@ -7,7 +7,6 @@
 }
 
 .description{
-  //margin-left: 150px;
   max-width: 340px;
 }
 
@@ -45,6 +44,12 @@
   width: 76%;
 }
 
+.preview{
+  &:hover{
+    border: solid 3px #dc9322;
+  }
+}
+
 .sl-img{
   object-fit: cover;
   max-height: none;
@@ -69,6 +74,20 @@
 
 .slider-buttons{
   text-align: right;
+}
+
+.slider-button-icon__up{
+  width: 20px;
+  height: 20px;
+  transform: rotate(270deg);
+  fill: white;
+}
+
+.slider-button-icon__down{
+  width: 20px;
+  height: 20px;
+  transform: rotate(90deg);
+  fill: white;
 }
 
 .slider-tape{

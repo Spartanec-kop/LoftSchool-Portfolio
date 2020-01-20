@@ -15,8 +15,12 @@
           .preview.preview4
             +image('content/5.jpg', 'sl-img img1')
         .slider-buttons
-          button.slider-button.slider-button__up &#8743
-          button.slider-button.slider-button__down &#8744
+          button.slider-button.slider-button__up
+            svg.slider-button-icon__up
+              use(xlink:href="./sprite.svg#arrow-down")
+          button.slider-button.slider-button__down
+            svg.slider-button-icon__down
+              use(xlink:href="./sprite.svg#arrow-down")
         .number 4
       .description
         .description-tags
