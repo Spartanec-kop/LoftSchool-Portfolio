@@ -1,6 +1,70 @@
-.link-class {
-  width: 100px;
-  height: 100px;
-  fill: red;
+.section1__label {
+  font-size: 18px;
+  font-weight: 900;
+  opacity: 0.3;
 }
 
+.section1__name {
+  font-size: 60px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.section1{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.section1__body {
+  display: flex;
+  text-align: center; 
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.scroll{
+  display:flex;
+  align-items: center;
+  height:10vh;
+}
+
+.scroll__label{
+  display: flex;
+  justify-content:center;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.67;
+  letter-spacing: normal;
+  align-items: center;
+}
+
+.scroll__icon__svg{
+  width:30px;
+  height:45px;
+  margin-left: 10px;
+}
+
+
+.border{
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+.paralax{
+  width: 100%;
+}
+
+.welcome{
+  position:relative;
+}
+
+.scroll-link{
+  text-decoration: none;
+    &:hover {
+      fill: $links-color;
+      color: $links-color;
+  }
+}

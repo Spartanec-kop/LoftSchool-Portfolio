@@ -2,7 +2,7 @@ include ./mixins.pug
 
 <!DOCTYPE html>
 html(lang="en")
-  head
+  header
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
@@ -10,6 +10,35 @@ html(lang="en")
   body
     .wrapper
       .maincontent
-        +image('content/user.jpg', 'user-pic')
-        +icon('link', 'link-class')
-        .icon-bg
+        .welcome         
+          //- img.paralax(src="content/MuntainNoParalax.png")
+          .border
+            +image('content/MuntainNoParalax.png', 'paralax')
+            .triangles
+                svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                  polygon(points="0,0 0,100 1000,100")
+                svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                  polygon(points="0,100 1000,100 1000,0")
+          section
+            include ./section/section1
+          section
+            include ./section/section2           
+          section
+            include ./section/section3
+          section
+            include ./section/section4
+            
+        .border-budda
+          .budda
+            +image('content/Budda.jpg', 'budda-img')
+            .triangles-budda
+              svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                polygon(points="0,0 1000,100 1000,0")
+              svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                polygon(points="0,0 0,100 1000,0")          
+          section  
+            include ./section/section5
+          section
+            include ./section/section6  
+        footer
+          include ./section/footer      
