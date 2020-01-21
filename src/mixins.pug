@@ -5,3 +5,10 @@ mixin icon(name, className)
 
 mixin image(path, className)
   img(src=require(`images/${path}`) class=className)
+
+mixin picture(path, className)
+  picture(class=className)
+    source(srcset=require(`images/${path}`) media="screen and (max-width: $bp-desktop-hd)")
+    source(srcset=require(`images/${path}`) media="screen and (max-width: $bp-desktop)")
+    source(srcset=require(`images/${path}`) media="screen and (max-width: $bp-tablets)")
+    source(srcset=require(`images/${path}`) media="screen and (max-width: $bp-phones)")
