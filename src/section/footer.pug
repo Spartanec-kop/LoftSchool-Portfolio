@@ -1,0 +1,37 @@
+.footer
+  .container
+    .footer-in-cotainer
+      .footer-year © 2019
+      .footer-autor-name
+        .footer-autor-name-text Павел
+          br
+          span Варнавский     
+        .footer-autor-name-desc
+          span Личный сайт
+          br
+          span веб-разработчика
+      .footer-main-section
+        ul.footer-menu
+          each nav_item in [{link:'#section1',name:'main',title:'Главная'},{link:'#section2',name:'about-me',title:'Обо мне'},{link:'#section3',name:'skills',title:'Навыки'},{link:'#section4',name:'works',title:'Работы'},{link:'#section5',name:'reviews',title:'Отзывы'},{link:'#section6',name:'contact',title:'Связаться'}]
+              li.footer__navigate__item
+                  a(class=`footer__navigate__${nav_item.name}__link footer__navigate__link` href=`${nav_item.link}`)=nav_item.title
+        .footer-desc
+          .footer-desc-left
+            p.footer-desc-left-text Этот сайт я сделал в рамках обучения в Школе онлайн образования Loftschool
+            ul.footer__socials
+              li.footer__socials__item
+                  a(class=`footer-socials__link socials__link__insta` href='#' target="_blank")
+                      svg.footer-socials__link-icon
+                          use(xlink:href="./sprite.svg#insta")
+              li.footer__socials__item
+                  a(class=`footer-socials__link socials__link__vk` href='#'  target="_blank")
+                      svg.footer-socials__link-icon
+                          use(xlink:href="./sprite.svg#vk")
+              li.footer__socials__item
+                  a(class=`footer-socials__link socials__link__github` href='https://github.com/Spartanec-kop/Varnavskii-ls' target="_blank")
+                      svg.footer-socials__link-icon
+                          use(xlink:href="./sprite.svg#github") 
+          .footer-desc-right
+            p.footer-desc-right-text Всегда пишите код так, будто сопровождать его будет склонный к насилию психопат, который знает где вы живете
+            br
+            span.martin Martin Golding
