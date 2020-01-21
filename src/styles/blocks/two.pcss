@@ -1,43 +1,54 @@
 .section2{
   position:relative;
-  display: flex;
   padding-top:140px;
+  display:grid;
+  width: 100%;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 1fr;
 }
 
 .about-card {
-  width:35vw;
+  max-width: 360px;
+  width: 100%;
 }
+
+.about-card-wrapper{
+  margin-right:83px;
+  justify-self: end;
+}
+
+
 .section2__hello,
 .section2__hello__about-me__my-name,
 .section2__hello__about-me__my-working{
-  padding-left:50px;
+  padding-left:83px;
 }
 
 .section2__hello__about-me{
-  width: 35vw;
-  max-width: 1100px;
+  max-width: 570px;
 }
 
 .star{
-  content: '*';
   color: red;
   font-size: 48px;
   margin-top: -10px;
   opacity: 0.1;
+  padding-left: 40px;
+}
+
+.section2__hello__my-photo{
+  padding-right: 30px;
 }
 
 .user-pic{
   border-radius: 230px;
   width:230px;
-  margin-right: 100px;
-}
-
-.section2__legend__legend_table{
-  margin-right: 40px;
+  margin: 0 auto;
 }
 
 .section2__legend__legend{
-  padding-top:40px;
+  padding-top:80px;
+  width:100%;
 }
 
 .section2__hello__about-me__my-name{
@@ -66,28 +77,118 @@
   padding-left: 25px;
 }
 
-.section2__legend__legend_label, 
-.section2__legend__legend_value{
-  width: 160px;
-  padding-bottom: 10px;
-}
-
 .section2__legend__legend_label{
   font-size:16px;
   font-weight: 600;
   opacity: 0.5;
+  padding-bottom: 7%;
 }
 
 .section2__legend__legend_value{
   font-size:16px;
   font-weight: 600;
+  padding-bottom: 7%;
 }
 
 .section2__hello{
   margin-top:0px;
 }
 
-.section2__row.section2__legend{
+.section2__legend{
   display: flex;
   padding-top: 110px;
+}
+
+@include desktop{
+  .section2{
+    padding-top:330px;
+  }  
+}
+
+@include tablets{
+  .section2__hello__about-me{
+    max-width: 480px;
+  }
+
+  .about-card-wrapper{
+    margin-right:50px;
+    justify-self: end;
+  }
+
+  .user-pic{
+    border-radius: 170px;
+    width:195px;
+    margin: 0 auto;
+  }
+  
+  .section2__hello,
+  .section2__hello__about-me__my-name,
+  .section2__hello__about-me__my-working{
+    padding-left:50px;
+  }
+  
+  .star{
+    color: red;
+    font-size: 48px;
+    margin-top: -10px;
+    opacity: 0.1;
+    padding-left: 7px;
+  }
+
+  .section2__legend{
+    padding-top: 46px;
+  }
+
+  .section2__legend__legend{
+    padding-top:57px;
+  }
+
+  .section2__hello__about-me__my-name{
+    font-size:30px;
+  }
+
+
+}
+
+@include phones{
+  .section2__hello__about-me{
+    max-width: 260px;
+  }
+
+  .about-card-wrapper{
+    width:100%;
+  }
+
+  .section2__hello__about-me{
+    padding-top:51px;
+    position: relative;
+  }
+
+  .section2{
+    position:relative;
+    padding-top:140px;
+    display:grid;
+    width: 100%;
+    grid-template-columns: 100%;
+    grid-template-rows: max-content max-content;
+  }
+
+  .about-card-wrapper{
+    margin: 0 auto;
+  }
+
+  .section2__hello,
+  .section2__hello__about-me__my-name,
+  .section2__hello__about-me__my-working{
+    padding-left:0px;
+  }
+
+  .section2__legend{
+    position: absolute;
+    left:-48px;
+  }
+
+  .section2__legend__description{
+    padding-left: 17px;
+  }
 }
