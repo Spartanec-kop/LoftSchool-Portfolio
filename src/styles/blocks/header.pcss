@@ -20,9 +20,11 @@
     align-self: flex-start;
 }
 
-.header__socials{
-    justify-content: space-between;
-    width:9vw;
+.header__socials__item{
+  padding-right: 50px;
+  &:last-child{
+    padding-right: 0px;
+  }
 }
 
 .socials__link{
@@ -59,4 +61,9 @@
 .header__my-link{
     font-weight: 900;
     font-size: 36px;
+    text-transform: uppercase;
+}
+
+.header__gamb__menu{
+  display: none;
 }
