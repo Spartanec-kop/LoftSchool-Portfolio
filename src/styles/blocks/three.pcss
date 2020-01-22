@@ -3,18 +3,21 @@
 }
 
 .section3_body{
-    display: flex;
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0px, 35%) max-content;
+    grid-template-rows: 1fr;   
 }
 
 .section3__desc{
-    padding-left: 50px;
-    max-width: 35vw;
+    padding-left: 50px;;
     line-height: 2;
     font-size: 16px;
     font-weight: 600;
 }
 
 .section3-text{
+  max-width: 585px;
   opacity: 0.5;
 }
 
@@ -24,20 +27,30 @@
 }
 
 .bag {
-    width:413px;
+  position: relative;
     height:100%;
-    padding-top:59px;
+    width: 458px;
+    padding-top:120px;
+    justify-self: end;
+}
+
+.bag-img{
+  padding-right: 40px;
+  width:458px;
+  height: 627px;
 }
 
 .section3__title-text{
     font-size:30px;
     font-weight: 900;
     padding-bottom:35px;
+    max-width: 270px;
 }
 
 .skill-group{
   display: flex;
   padding-top: 15px;
+  min-width: max-content;
 }
 
 .skill{
@@ -46,6 +59,7 @@
   align-items: center;
   justify-content: center;
   padding-right: 20px;
+  min-width: max-content;
 }
 .skill__title{
   position: absolute;
@@ -66,13 +80,125 @@
   stroke-width: 4px;
 }
 
-.skill-circle-segment {
-  stroke: linear-gradient(to top, #fefcea, #f1da36);
- }
+@include desktop{
 
- .gradient {
-  background: #fefcea; /* Для старых браузров */
-  background: linear-gradient(to top, #fefcea, #f1da36);
-  padding: 10px;
-  border: 1px solid #333;
- }
+}
+@media screen and (max-width: 910px) {
+  .skills{
+     padding-left: 10px;
+  }
+
+  .section3__desc {
+    padding-left: 20px;
+  }
+}
+
+@include tablets{
+  .section3_body{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 281px;   
+    justify-items: center;
+  }
+
+  .bag {
+    height:100%;
+    width: 458px;
+    padding-top:0px;
+    justify-self: center;
+  }
+  .section3__desc{
+    text-align: center;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding-bottom: 120px;
+  }
+  
+  .bag-img{
+    padding-right: 0px;
+    width:458px;
+    height: 627px;
+    object-fit: contain;
+  }
+
+  .section3__title-text{
+    max-width: 270px;
+    line-height: 1.2;
+    margin: 0 auto;
+    
+  }
+
+  .section3-text{
+    max-width: 428px;
+    line-height: 1.71;
+    margin: 0 auto;
+  }
+
+  .skill{
+    padding-right: 0px;
+  }
+}
+
+@include phones{
+  .section3{
+    padding-top:470px;
+  }
+
+  .section3_body{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 281px;   
+    justify-items: center;
+  }
+
+  .section3__desc{
+    text-align: left;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding-bottom: 120px;
+    padding-left: 0px;
+  }
+
+  .section3__title-text{
+    max-width: 270px;
+    line-height: 1.2;
+    margin: 0; 
+    margin-left: 30px;
+    
+  }
+
+  .section3-text{
+    max-width: 257px;
+    line-height: 1.71;
+    margin: 0;
+    margin-left: 30px;
+  }
+
+  .skills{
+    text-align: center;
+    padding-left: 0px;
+  }
+
+  .skill-group{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding-top: 15px;
+    min-width: max-content;
+  }
+  
+  .skill{
+    padding-right: 0px;
+  }
+
+  .skill-circle-segment{  
+    stroke-width: 5
+  }
+
+  .bag{
+    width: auto;
+  }
+}
