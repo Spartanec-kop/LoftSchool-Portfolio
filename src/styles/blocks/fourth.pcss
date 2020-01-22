@@ -38,13 +38,18 @@
   padding-top: 40px;
 }
 
+.description-title span{
+  display: block;
+}       
+
 .slider{
   position: relative;
   padding-right: 150px;
-  width: 76%;
+  max-width: 1130px;
 }
 
 .preview{
+  width:178px;
   &:hover{
     border: solid 3px #dc9322;
   }
@@ -56,6 +61,7 @@
 }
 
 .slider-main-window{
+  position: relative;
   background-color: red;
 }
 
@@ -92,9 +98,9 @@
 
 .slider-tape{
   position: absolute;
-  bottom:50px;
-  right: 150px;
-  width: 178px;
+  bottom:0px;
+  right: 0px;
+  //width: 178px;
   background: blue;
 }
 
@@ -103,7 +109,7 @@
   font-size: 400px;
   font-weight: 800;
   opacity: 0.2;
-  right: 0;
+  right: 0px;
   bottom:80px;
   z-index: -1;
 }
@@ -139,5 +145,123 @@
   border-bottom: 2px solid transparent;
   &:hover{
     border-bottom: 2px solid #586ed3;
+  }
+}
+
+@media screen and (max-width: 1270px) {
+  .preview4{
+    display: none;
+  }
+}
+
+@include desktop{
+  .slider-main-window{
+    min-width: 623px;
+    min-height: 353px;
+  }  
+
+  .slider{
+    padding-right: 110px;
+  }
+
+  .slider-tape{
+    position: absolute;
+    bottom:0px;
+    right: 0px;
+    //width: 178px;
+    background: blue;
+  }
+  .number{
+    position: absolute;
+    font-size: 300px;
+    font-weight: 800;
+    opacity: 0.2;
+    right: 0;
+    top:0px;
+    line-height: 0.7;
+  }
+}
+
+@media screen and (max-width: 970px) {
+  .section4-body{
+    display: block;
+  }
+  .slider{
+    margin: 0 auto;
+    min-width: 470px;
+  }
+
+
+.slider-main-window {
+    min-width: 320px; 
+    min-height: 10px; 
+}
+
+  .description{
+    padding-top: 50px;
+    margin: 0 auto;
+    max-width: 440px;
+    text-align: center;
+  }
+
+  .tags-items{
+    display: flex;
+    justify-content: center;
+  }
+
+  .description-title span{
+    display: inline;
+    &:last-child{
+      &::before{
+        content: ' ';
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .slider{
+    padding-right: 0px;
+  }
+  .slider-tape{
+    display: none;
+  }
+}
+
+@include phones{
+  .slider{
+    width: 100vw;
+    min-width: 10px;
+  }
+
+  .section4 .container{
+    width: 100vw;
+  }
+
+  .slider-buttons{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    height: 51px;
+    z-index: 10;
+  }
+  
+  .description{
+    max-width: 280px;
+  }
+
+  .description-title,
+  .description-body{
+    text-align: left;
+  }
+
+  .section4-title{
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+
+  }
+  .section4-body{
+    padding-top: 35px;
   }
 }
