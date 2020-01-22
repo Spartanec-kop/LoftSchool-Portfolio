@@ -1,12 +1,12 @@
-
 .section.section3   
     .section3_body#section3
         .bag
             +image('content/bag.png', 'bag-img')
         .section3__desc
           .section3__title
-            h2.section3__title-text Чем я могу быть полезен вам
-            p.section3-text Этот сайт я сделал в рамках обучения в Школе онлайн образования LoftSchool. Чуть позже я освежу в нём свой контент. А пока посмотрите, как тут всё классно и красиво!  
+            .container
+              h2.section3__title-text Чем я могу быть полезен вам
+              p.section3-text Этот сайт я сделал в рамках обучения в Школе онлайн образования LoftSchool. Чуть позже я освежу в нём свой контент. А пока посмотрите, как тут всё классно и красиво!  
           .skills
               - var skills = {frontend:{title:'Fron-end',skills:{html:{title:'HTML5',skillCount:50},css:{title:'CSS3',skillCount:30},js:{title:'javascript',skillCount:70},vue:{title:'jquery и Vue.js',skillCount:70}}},workflow:{title:'Workflow',skills:{git:{title:'GIT',skillCount:80},terminal:{title:'Terminal',skillCount:50},Gulp:{title:'Gulp',skillCount:10},webpack:{title:'Webpack',skillCount:30}}}}
               svg(style="width:0; height:0; position: absolute;" aria-hidden="true")
