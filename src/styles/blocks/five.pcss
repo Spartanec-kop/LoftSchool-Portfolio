@@ -26,7 +26,7 @@
 }
 
 .comments{
-  padding-top: 437px;
+  padding-top: 377px;
 }
 
 .comments-body{
@@ -86,7 +86,7 @@ fill: currentColor;
 .comment-item{
   display: flex;
   max-width: 442px;
-  margin-right: 75px;
+  margin-right: 50px;
   &:last-child{
     margin-right: 0px;
   }
@@ -141,4 +141,65 @@ fill: currentColor;
   height: 75px;
   object-fit: cover;
   border-radius: 50%;
+}
+
+@include desktop{
+  .comments{
+    padding-top: 275px;
+  }
+
+}
+
+@include tablets{
+  .comments-buttons{
+    padding-left: 30px;
+  }
+
+  .comment-item-apos-icon{
+    width: 35px;
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .comments-title{
+    display: block;
+  }
+
+  .comments-title-text{
+    font-size: 28px;
+    text-align: center;
+
+  }
+
+  .comments-buttons{
+    text-align: center;
+  }
+
+  .comments-buttons{
+    padding-left: 0px;
+    padding-top: 30px;
+  }
+
+  .comments-body{
+    padding-top: 38px;
+  }
+
+  .comment-item:not(:first-child){
+      display: none;
+  }
+
+  .comment-item{
+    margin: 0 auto;
+  }
+
+  .comment-item-text{
+    min-width: 305px;
+  }
+}
+
+@include phones{
+  .comment-item-apos{
+    display: none;
+  }
 }
