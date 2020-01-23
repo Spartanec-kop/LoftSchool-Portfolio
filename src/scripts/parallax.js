@@ -13,8 +13,9 @@ let parallax = (function(){
     },
     init: function(wScroll){
       layers.forEach((element, i) => {
-        this.move(element, wScroll, i * 80);
-        console.log('ping')
+        if (element.classList && element.classList.contains('parallax__layer')){
+          this.move(element, wScroll, i * 80);
+        }        
       });
     }
   }
