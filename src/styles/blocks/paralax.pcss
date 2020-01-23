@@ -1,11 +1,27 @@
+.no-paralax{
+  position: absolute;
+  width: 100%;
+  height: max-content;
+}
+
+.no-parallax-image{
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200vh;
+  object-fit: cover;
+}
+
 .parallax{
+  position: absolute;
   display: grid;
   grid-template-rows: 100vh 1fr;
   grid-template-columns: 1fr;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 200vh;
 }
 
 .parallax__layer {
@@ -17,6 +33,12 @@
   grid-row-end: 3;
   width: 100%;
   height: 100%;
+}
+
+.parallax__image{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .main-section1{
@@ -41,10 +63,24 @@
   align-self: end;
 }
 
-.parallax__image{
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+@include tablets{
+  .no-parallax-image{
+    display: block;
+  }
+
+  .parallax{
+    display: none;
+  }
+}
+
+@include phones{
+  .no-parallax-image{
+    display: block;
+  }
+  
+  .parallax{
+    display: none;
+  }
 }
 
 // .parallax__layer:nth-child(7){
