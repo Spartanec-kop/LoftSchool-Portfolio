@@ -10,9 +10,9 @@ html(lang="en")
   body
     .wrapper
       .maincontent
-        .welcome#app
+        .welcome
           .no-paralax
-            +picture('content/Budda', 'no-parallax-image')
+            +picture('content/baloon', 'no-parallax-image')
             .triangles
               svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
                 polygon(points="0,0 0,100 1000,100")
@@ -29,25 +29,36 @@ html(lang="en")
                   polygon(points="0,0 0,100 1000,100")
                 svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
                   polygon(points="0,100 1000,100 1000,0")
-          section.main-section1
+          section.parallax-content1
             include ./section/section1
-          section.main-section2
+          section.parallax-content2
             include ./section/section2           
           section
             include ./section/section3
           section
-            include ./section/section4           
-          .border-budda
-            .budda
-              +picture('content/Budda', 'budda-img')
+            include ./section/section4                    
+          .budda-wrapper
+            .no-paralax
+              +picture('content/Budda', 'no-parallax-image')
               .triangles-budda
                 svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
                   polygon(points="0,0 1000,100 1000,0")
                 svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
-                  polygon(points="0,0 0,100 1000,0")          
-            section  
+                  polygon(points="0,0 0,100 1000,0")
+            .parallax-budda        
+              each layer in ['6','5','4','3','2'] 
+                .parallax__layer            
+                  +image(`parallax/budda${layer}.png`, 'parallax__image')           
+              .parallax__layer
+                +image(`parallax/budda1.png`, 'parallax__image')
+                .triangles-budda
+                  svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                    polygon(points="0,0 1000,100 1000,0")
+                  svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
+                    polygon(points="0,0 0,100 1000,0")
+            section.parallax-content2  
               include ./section/section5
-            section
+            section.parallax-content2
               include ./section/section6  
           footer
             include ./section/footer      

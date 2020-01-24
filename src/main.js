@@ -10,7 +10,7 @@ import "./scripts/parallax";
 import Vue from 'vue';
 import test from "./component/TestComponent.vue"
 
-new Vue({
-  el:"#app",
-  components:{test}
-})
+// new Vue({
+//   el:"#app",
+//   components:{test}
+// })

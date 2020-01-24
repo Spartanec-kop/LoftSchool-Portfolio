@@ -1,8 +1,9 @@
 let parallax = (function(){
-  let parallaxNode = document.querySelector('.parallax');
+  let parallaxMountainNode = document.querySelector('.parallax');
+  let parallaxBuddaNode = document.querySelector('.parallax-budda');
 
   return {
-    nodeExists:parallaxNode.childNodes,
+    nodeExists:parallaxMountainNode.childNodes,
     move: function(block, windowScroll, strafeAmount){
       let strafe = windowScroll / -strafeAmount + '%';
       let transformString = `translate3d(0, ${strafe}, 0)`
@@ -13,11 +14,19 @@ let parallax = (function(){
       style.webkitTransform = transformString;
     },
     init: function(wScroll){
-      
-      let layers =parallaxNode.childNodes ? [...parallaxNode.childNodes].filter(i => i.classList && i.classList.contains('parallax__layer') ) :[]
-      layers.forEach((element, i) => {
-          this.move(element, wScroll, (i + 1) * 40);       
-      });
+      if (wScroll < window.innerHeight * 2) {
+        let layers =parallaxMountainNode.childNodes ? [...parallaxMountainNode.childNodes].filter(i => i.classList && i.classList.contains('parallax__layer') ) :[]
+        layers.forEach((element, i) => {
+            this.move(element, wScroll, (i + 1) * 40);       
+        });
+      }
+      let parallaxBuddaPositionStart = parallaxBuddaNode.parentNode.offsetTop + (parallaxBuddaNode.offsetHeight / 100 * 5);
+      if (wScroll >= parallaxBuddaPositionStart ) {
+        let layers =parallaxBuddaNode.childNodes ? [...parallaxBuddaNode.childNodes].filter(i => i.classList && i.classList.contains('parallax__layer') ) :[]
+        layers.forEach((element, i) => {
+            this.move(element, wScroll - parallaxBuddaPositionStart < 100 ? 0 : wScroll - parallaxBuddaPositionStart, (i + 1) * 40);                
+        });
+      }
     }
   }
 }());
@@ -25,7 +34,7 @@ let parallax = (function(){
 window.onscroll = function () {
   let wScroll = window.pageYOffset;
   
-  if (parallax.nodeExists){
+  if (window.innerWidth > 768 && parallax.nodeExists){
     parallax.init(wScroll)
   } 
 }

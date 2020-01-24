@@ -3,6 +3,11 @@
   width: 100%;
   height: max-content;
 }
+.budda-wrapper{
+  position: relative;
+  width: 100%;
+  height: max-content;
+}
 
 .no-parallax-image{
   display: none;
@@ -24,6 +29,17 @@
   height: 200vh;
 }
 
+.parallax-budda{
+  position: absolute;
+  display: grid;
+  grid-template-rows: 100vh 1fr;
+  grid-template-columns: 1fr;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 115%;
+}
+
 .parallax__layer {
   position: relative;
   display: block;
@@ -41,14 +57,14 @@
   object-fit: cover;
 }
 
-.main-section1{
+.parallax-content1{
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 1;
   grid-row-end: 1;
 }
 
-.main-section2{
+.parallax-content2{
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 2;
