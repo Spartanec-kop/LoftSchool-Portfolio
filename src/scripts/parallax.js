@@ -1,7 +1,8 @@
 let parallax = (function(){
-  let layers = document.querySelector('.parallax').childNodes;
+  let parallaxNode = document.querySelector('.parallax');
 
   return {
+    nodeExists:parallaxNode.childNodes,
     move: function(block, windowScroll, strafeAmount){
       let strafe = windowScroll / -strafeAmount + '%';
       let transformString = `translate3d(0, ${strafe}, 0)`
@@ -13,8 +14,8 @@ let parallax = (function(){
     },
     init: function(wScroll){
       
-      let lAyersFitered = [...layers].filter(i => i.classList && i.classList.contains('parallax__layer') )
-      lAyersFitered.forEach((element, i) => {
+      let layers =parallaxNode.childNodes ? [...parallaxNode.childNodes].filter(i => i.classList && i.classList.contains('parallax__layer') ) :[]
+      layers.forEach((element, i) => {
           this.move(element, wScroll, (i + 1) * 40);       
       });
     }
@@ -23,6 +24,8 @@ let parallax = (function(){
 
 window.onscroll = function () {
   let wScroll = window.pageYOffset;
-
-  parallax.init(wScroll)
+  
+  if (parallax.nodeExists){
+    parallax.init(wScroll)
+  } 
 }
