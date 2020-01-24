@@ -9,8 +9,9 @@ import "./scripts/parallax";
 
 import Vue from 'vue';
 import test from "./component/TestComponent.vue"
+import skills from "./component/skills.vue"
 
-// new Vue({
-//   el:"#app",
-//   components:{test}
-// })
+new Vue({
+  el:"#appSkills",
+  components:{skills}
+})
