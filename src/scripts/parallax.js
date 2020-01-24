@@ -12,12 +12,10 @@ let parallax = (function(){
       style.webkitTransform = transformString;
     },
     init: function(wScroll){
-      let j = 1;
-      layers.forEach((element, i) => {
-        if (element.classList && element.classList.contains('parallax__layer')){
-          this.move(element, wScroll, j * 40);
-          j++;
-        }        
+      
+      let lAyersFitered = [...layers].filter(i => i.classList && i.classList.contains('parallax__layer') )
+      lAyersFitered.forEach((element, i) => {
+          this.move(element, wScroll, (i + 1) * 40);       
       });
     }
   }
