@@ -4,10 +4,10 @@
       .comments-title#section5
         .comments-title-text Что обо мне говорят
         .comments-buttons
-          button.comments-button-left(v-on:click="navigate('left')")
+          button.comments-button-left(v-on:click="navigate('left')" :disabled="leftButtonDisabled()" :class="{ 'button-disable': leftButtonDisabled() }")
             svg.comments-button-left-icon
                use(:xlink:href="createSvgUrl('arrow-down')")
-          button.comments-button-right(v-on:click="navigate('right')")
+          button.comments-button-right(v-on:click="navigate('right')" :disabled="rightButtonDisabled()" :class="{ 'button-disable': rightButtonDisabled() }")
             svg.comments-button-right-icon
               use(:xlink:href="createSvgUrl('arrow-down')")
       .comments-body
@@ -25,7 +25,6 @@ export default {
   data() {
     return{
       firstComment: 0,
-      pageLength: 2,
       comments:[
         {
           name:'Ковальчук Дмитрий',
@@ -61,29 +60,59 @@ export default {
       ]
     }
   },
+  ready: function () {
+    window.addEventListener('resize', this.handleResize)
+  },
   methods:{
+    handleResize(){
+      if (this.oneMessage()){
+        navigate('left')
+      }
+      else{
+         navigate('right')
+      }
+    },
     navigate(direction){
       switch(direction) {
       case 'left':
-        this.firstComment == 0 ? this.firstComment = this.comments.length - 1 : this.firstComment --;
+        this.firstComment == 0 ? this.firstComment = 0 : this.firstComment --;
         break
-
       case 'right':
-        this.firstComment + 1 == this.comments.length ? this.firstComment = 0 : this.firstComment ++
+        if (this.oneMessage())
+          {this.firstComment + 1 == this.comments.length ? this.firstComment + 1 : this.firstComment ++}
+        else{
+          this.firstComment + 2 == this.comments.length ? this.firstComment + 2 : this.firstComment ++
+        }    
         break
       }
     },
     createSvgUrl(iconName){
       let icon = require(`images/icons/${iconName}.svg`);
       return icon.default.url;
+    },
+    oneMessage(){
+      return window.innerWidth <= 550 ? true : false
+    },
+    leftButtonDisabled(){
+      return this.firstComment == 0
+    },
+    rightButtonDisabled(){
+      if (this.oneMessage()){
+        return this.firstComment == this.comments.length - 1
+      }
+      else{
+        return this.firstComment == this.comments.length - 2
+      }       
     }
   },
   computed:{
-    showingComment(){
-      if(this.firstComment == this.comments.length -1 ){
-        return [this.comments[this.firstComment],this.comments[0]]
+    showingComment(){ 
+      if(this.oneMessage()){
+        return [this.comments[this.firstComment]]
       }
-      return [this.comments[this.firstComment],this.comments[this.firstComment + 1]]  
+      else{
+        return [this.comments[this.firstComment],this.comments[this.firstComment + 1]]
+      } 
     }
   }
 }
