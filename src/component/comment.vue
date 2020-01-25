@@ -27,7 +27,6 @@ export default {
     },
     createImageUrl(pictureName){
       return require(`images/content/${pictureName}`);
-      //return icon.default.url;
     }
   }
 }
