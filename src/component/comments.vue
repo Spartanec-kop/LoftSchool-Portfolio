@@ -5,11 +5,11 @@
         .comments-title-text Что обо мне говорят
         .comments-buttons
           button.comments-button-left(v-on:click="navigate('left')")
-            svg.comments-button-left-icon L
-              //- use(xlink:href="./sprite.svg#arrow-down")
+            svg.comments-button-left-icon
+               use(:xlink:href="createSvgUrl('arrow-down')")
           button.comments-button-right(v-on:click="navigate('right')")
-            svg.comments-button-right-icon R
-              //- use(xlink:href="./sprite.svg#arrow-down")
+            svg.comments-button-right-icon
+              use(:xlink:href="createSvgUrl('arrow-down')")
       .comments-body
         -var comments=[{name:'Ковальчук Дмитрий',avatar:'kovalchuc',position:'Основатель LoftSchool',text:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!'},{name:'Владимир Сабанцев',avatar:'sabancev',position:'Преподаватель',text:'Этот код выдержит любые испытания. Только пожалуйста, не загружайте сайт на слишком старых браузерах'}];
         .comments-items
@@ -29,31 +29,31 @@ export default {
       comments:[
         {
           name:'Ковальчук Дмитрий',
-          avatar:'kovalchuc',
+          avatar:'kovalchuc.jpg',
           position:'Основатель LoftSchool',
           text:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!'
         },
         {
           name:'Владимир Сабанцев',
-          avatar:'sabancev',
+          avatar:'sabancev.jpg',
           position:'Преподаватель',
           text:'Этот код выдержит любые испытания. Только пожалуйста, не загружайте сайт на слишком старых браузерах'
         },
         {
           name:'Иван Иванов',
-          avatar:'ivanov',
+          avatar:'ivanov.jpg',
           position:'Преподаватель',
           text:'Очень большой комментарий от преподавателя Иванова Ивана Ивановича'
         },
         {
           name:'Петр Петров',
-          avatar:'petrov',
+          avatar:'petrov.jpg',
           position:'Преподаватель',
           text:'Этот комментарий оставил преподаватель Петров Петр Петрович и он очень этим доволен'
         },
         {
           name:'Тест Тестов',
-          avatar:'testov',
+          avatar:'testov.jpg',
           position:'Преподаватель',
           text:'Меня зовут Тестов Тест Тестович и это я оставил свой комментарий на сайте этого разработчика.'
         }
@@ -65,13 +65,17 @@ export default {
     navigate(direction){
       switch(direction) {
       case 'left':
-        this.firstComment == 0 ? this.firstComment = this.comments.length - 1 : this.firstComment = this.firstComment - 1;
+        this.firstComment == 0 ? this.firstComment = this.comments.length - 1 : this.firstComment --;
         break
 
       case 'right':
-        this.firstComment + 1 == this.comments.length ? this.firstComment = 0 : this.firstComment = this.firstComment + 1
+        this.firstComment + 1 == this.comments.length ? this.firstComment = 0 : this.firstComment ++
         break
       }
+    },
+    createSvgUrl(iconName){
+      let icon = require(`images/icons/${iconName}.svg`);
+      return icon.default.url;
     }
   },
   computed:{
