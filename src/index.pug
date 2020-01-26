@@ -20,10 +20,10 @@ html(lang="en")
                 polygon(points="0,100 1000,100 1000,0")
           .parallax         
             each layer in ['7','6','5','4','3','2'] 
-              .parallax__layer            
-                +image(`parallax/mountain${layer}.png`, 'parallax__image')           
+              .parallax__layer 
+                +pictureParallax(`mountain${layer}`, 'parallax__image')          
             .parallax__layer
-              +image(`parallax/mountain1.png`, 'parallax__image')
+              +pictureParallax(`mountain1`, 'parallax__image')
               .triangles
                 svg.triangles__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
                   polygon(points="0,0 0,100 1000,100")
@@ -47,10 +47,10 @@ html(lang="en")
                   polygon(points="0,0 0,100 1000,0")
             .parallax-budda        
               each layer in ['6','5','4','3','2'] 
-                .parallax__layer            
-                  +image(`parallax/budda${layer}.png`, 'parallax__image')           
+                .parallax__layer
+                  +pictureParallax(`budda${layer}`, 'parallax__image')          
               .parallax__layer
-                +image(`parallax/budda1.png`, 'parallax__image')
+                +pictureParallax(`budda1`, 'parallax__image')
                 .triangles-budda
                   svg.triangles-budda__item(viewBox="0 0 1000 100" preserveAspectRatio="none")
                     polygon(points="0,0 1000,100 1000,0")
