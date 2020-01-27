@@ -3,14 +3,17 @@ if (process.env.NODE_ENV === "development") {
   require("file-loader!./index.pug");
 }
 
-
-import "./scripts/skills";
 import "./scripts/parallax";
 
 import Vue from 'vue';
-import test from "./component/TestComponent.vue"
 import skills from "./component/skills.vue"
 import comments from "./component/comments.vue"
+import myWorks from "./component/myWorks.vue"
+
+new Vue({
+  el:"#section4-body",
+  components:{myworks: myWorks}
+})
 
 new Vue({
   el:"#appSkills",
