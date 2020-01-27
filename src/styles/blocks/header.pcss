@@ -1,4 +1,4 @@
-.header,  .header__socials{
+.header, .header__socials{
     display: flex;
     justify-content: space-between;
 }
@@ -69,4 +69,32 @@
 
 .header__gamb__menu{
   display: none;
+}
+
+@media screen and (max-width: 850px) {
+  .header__navigate{
+    display: none;
+  }
+
+  .header__gamb__menu{
+    display: block;
+  }
+
+  .header__socials__item{
+    &:nth-child(3){
+      margin-right: 93px;
+    }
+  }
+}
+
+@include tablets{
+
+  
+}
+
+@include phones{
+  .header__socials__item{
+    display: none;
+  }
+
 }
