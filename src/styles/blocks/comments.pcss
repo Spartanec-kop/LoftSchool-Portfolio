@@ -1,0 +1,189 @@
+.comments{
+  position: relative;
+  padding-top: 377px;
+}
+
+.comments-body{
+  padding-top: 100px;
+}
+
+
+
+.comments-title{
+  display: flex;
+  align-items: center;
+}
+
+.comments-title-text{
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.comments-buttons{
+  padding-left: 120px;
+}
+
+.comments-button-left-icon{
+  transform: rotate(180deg);
+}
+.comments-button-left-icon,
+.comments-button-right-icon{
+  width: 8px;
+  height: 10px;
+}
+
+.comments-button-left,
+.comments-button-right{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid black;
+  background: transparent;
+  
+  
+  &:hover{
+    background: $links-color;
+  }
+}
+
+.button-disable{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #959caa;
+  fill: #959caa;
+  background: transparent;
+  cursor: default;
+  
+  &:hover{
+    background: transparent;
+  }
+}
+
+.comments-button-left{
+  margin-right: 30px;
+}
+
+.comments-items{
+  display: flex;
+}
+.comment-item{
+  display: flex;
+  max-width: 442px;
+  margin-right: 50px;
+  &:last-child{
+    margin-right: 0px;
+  }
+}
+
+.comment-item-apos-icon{
+  width: 75px;
+  height: 63px;
+}
+
+.comment-item-person{
+  display: flex;
+}
+
+.comment-item-body{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-width: 346px;
+  min-height: 200px;
+  margin-left: 20px;
+}
+
+.comment-item-apos-icon{
+  opacity: 0.05;
+}
+
+.comment-item-text{
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.5;
+}
+
+.comment-item-person-Name{
+  padding-left: 31px;
+}
+
+.person-Name{
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 2.67;
+}
+
+.person-position{
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.3;
+}
+
+.avatar-img{
+  width: 75px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+@include desktop{
+  .comments{
+    padding-top: 275px;
+  }
+
+}
+
+@include tablets{
+  .comments-buttons{
+    padding-left: 30px;
+  }
+
+  .comment-item-apos-icon{
+    width: 35px;
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .comments-title{
+    display: block;
+  }
+
+  .comments-title-text{
+    font-size: 28px;
+    text-align: center;
+
+  }
+
+  .comments-buttons{
+    text-align: center;
+  }
+
+  .comments-buttons{
+    padding-left: 0px;
+    padding-top: 30px;
+  }
+
+  .comments-body{
+    padding-top: 38px;
+  }
+
+  .comment-item:not(:first-child){
+      display: none;
+  }
+
+  .comment-item{
+    margin: 0 auto;
+  }
+
+  .comment-item-text{
+    min-width: 305px;
+  }
+}
+
+@include phones{
+  .comment-item-apos{
+    display: none;
+  }
+}

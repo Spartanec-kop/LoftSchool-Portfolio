@@ -5,3 +5,14 @@ mixin icon(name, className)
 
 mixin image(path, className)
   img(src=require(`images/${path}`) class=className)
+
+mixin picture(path, className)
+  picture(class=className)
+    source(srcset=require(`images/${path}320.jpg`) media="screen and (max-width: 480px)")
+    source(srcset=require(`images/${path}768.jpg`) media="screen and (max-width: 768px)")
+    img(srcset="" class=className)
+
+mixin pictureParallax(parallaxName, className)
+  picture(class=className)
+    source(srcset=require(`images/parallax/${parallaxName}.png`) media="screen and (min-width: 769px)")
+    img(srcset="" class=className)    

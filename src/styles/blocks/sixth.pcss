@@ -1,4 +1,5 @@
 .connect{
+  position: relative;
   padding-top:202px;
 }
 .connect-title{
@@ -90,7 +91,8 @@
 
 .send-form{
   margin-top:60px;
-  width: 347px;
+  width: 100%;
+  max-width: 347px;
   height: 80px;
   background-image: linear-gradient(to right, #9300e8, #4a00ed);
   border-radius: 40px 0px;
@@ -100,4 +102,81 @@
   &:hover{
     background-image: linear-gradient(to left, #9300e8, #4a00ed);
   }
+}
+
+@include desktop{
+  .connect-body{
+     max-width: 908px;
+     min-width: 745px;
+   }
+}
+
+@include tablets{
+  .connect-title{
+    text-align: center;
+  }
+
+  .connect-body{
+    min-width: 500px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .connect{
+    padding-top:172px;
+  }
+
+  .connect-body{
+    max-width: 908px;
+    min-width: 1px;
+  }
+
+  .connect-title{
+    font-size: 22px;
+  }
+
+  .person-info{
+    display: block; 
+    padding-top:32px;
+  }
+
+  .person-info-name{
+    width: 100%;
+    min-width: 1px;
+    text-align: center;
+  }
+
+  .person-info-mail{
+    width: 100%;
+    min-width: 1px;
+    padding-top: 44px;
+    text-align: center;
+  }
+  .connect-message{
+    text-align: center;
+    min-width: 1px;
+    padding-top: 62px;
+  }
+
+  .connect-icon{
+    display: none;
+  }
+
+  .send-form{
+    margin-top: 35px;
+  }
+  .connect-form{
+    text-align: center;
+  }
+
+  .person-info-label,
+  .person-info-mail,
+  .connect-message{
+    padding-left: 0px;
+  }
+
+  .send-form{
+    min-width: 259px;
+  }
+
 }

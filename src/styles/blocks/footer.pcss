@@ -1,11 +1,15 @@
 .footer{
+  position: relative;
   background-color: #252830;
 }
 
-.footer-in-cotainer{
+.footer-in-container{
   display: flex;
   color: white; 
   padding-top: 105px;
+}
+.copyright{
+  display: flex;
 }
 
 .footer-year{
@@ -36,6 +40,10 @@
 }
 
 .footer-autor-name-text span{
+  display: block;
+}
+
+.footer-autor-name-desc span{
   display: block;
 }
 
@@ -100,12 +108,7 @@
 
   &:last-child{
     margin-right: 0px;
-  }
-  // &:hover {
-  //   opacity: 1;
-  //   border: 1px solid $links-color;
-  // }
-  
+  }  
 }
 
 .footer-socials__link{
@@ -130,4 +133,111 @@
 
 .martin{
   font-style: italic;
+}
+
+@media screen and (max-width: 1530px) {
+  .copyright{
+    display: block;
+    min-width: 162px;
+  }
+
+  .footer-autor-name{
+    padding-left: 0px;
+  }
+}
+
+@media screen and (max-width: 1320px) {
+  .footer-main-section{
+    padding-left: 118px;
+  }
+
+  .footer-desc-right{
+    padding-left: 55px;
+  }
+
+}
+
+@media screen and (max-width: 1080px) {
+  .footer-main-section{
+    padding-left: 83px;
+  }
+
+  .footer-desc{
+    display: block;
+  }
+
+  .footer-desc-right{
+    padding-left: 0px;
+    padding-top: 65px;
+     max-width: 100%;
+  }
+
+  .footer-desc-left{
+    max-width: 100%;
+  }
+
+  .footer-main-section{
+    width: auto;
+  }
+
+  .footer-desc-right-text{
+  }
+}
+
+@media screen and (max-width: 940px) {
+  .footer-menu{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding-bottom: 30px;
+  }
+  .footer__navigate__item{
+    padding-bottom: 35px;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .footer-in-container{
+    display: block;
+    color: white; 
+    padding-top: 74px;
+  }
+
+  .footer-menu{
+    grid-template-columns: 1fr 1fr ;
+    grid-template-rows: 1fr 1fr 1fr;
+    padding-bottom: 30px;
+  }
+
+  .copyright{
+      text-align: left;
+      padding-bottom: 57px;
+  }
+
+  .footer-autor-name-text span{
+    display: inline;
+    &:last-child{
+      &::before{
+        content: ' ';
+      }
+    }
+  }
+
+  .footer-autor-name-desc span{
+    display: inline;
+    &:last-child{
+      &::before{
+        content: ' ';
+      }
+    }
+  }
+
+  .footer-main-section{
+    padding-left: 0px;
+    margin: 0 auto;
+  }
+  .footer-autor-name-desc{
+    padding-top: 0px;;
+  }
 }
