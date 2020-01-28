@@ -6,7 +6,9 @@
         stop(offset="100%" stop-color="#9300e8")
     .skill-group-title(v-for="skillsGroup of skills") {{skillsGroup.title}}
       .skill-group
-        skill(v-for="item of skillsGroup.skills" :skill="item")
+        skill(v-for="(item, index) of skillsGroup.skills" 
+        :skill="item"
+        :key="item.title + ' ' + index")
 </template>
 
 <script>

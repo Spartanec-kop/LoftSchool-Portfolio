@@ -17,14 +17,14 @@ function sendComment(){
       request.send(data);
       request.onreadystatechange = function () {
         if (request.readyState < 4)
-            console.log('loading')
+            console.log('loading');
         else if (request.readyState === 4) {
             if (request.status == 200 && request.status < 300)
-              console.log('success')
+              console.log('success');
             else
-              console.log('failure')
+              console.log('failure');
         }
-      }
+      };
     }
     catch(e){
       alert('Возникла ошибка! ' + e);
@@ -32,11 +32,11 @@ function sendComment(){
   
  }
  else{
-   alert("Не все поля формы заполнены")
+   alert("Не все поля формы заполнены");
  }
  
-};
+}
 
 let name  = document.getElementById('connect-form');
 
-name.onsubmit=()=>{sendComment(); return false;} 
+name.onsubmit=()=>{sendComment(); return false;};

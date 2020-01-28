@@ -33,15 +33,10 @@
 }
 
 .person-info-name{
-  border-bottom: 1px solid black;
   margin-right: 80px;
   min-width: 205px;
   width: 45%;
-  &:hover{
-    border-bottom: 1px solid $links-color;
-    fill: $links-color;
-    color: $links-color;
-  }
+  
 }
 
 .person-info-name-icon{
@@ -64,6 +59,7 @@
 }
 
 .connect-message{
+  width: 100%;
   padding-top:41px;
   border-bottom: 1px solid black;
   &:hover{
@@ -82,7 +78,7 @@
   max-width: 92%;
 }
 
-.person-info-label{
+.input-label{
   font-size: 16px;
   font-weight: 600;
   opacity: 0.3;
@@ -103,6 +99,12 @@
     background-image: linear-gradient(to left, #9300e8, #4a00ed);
   }
 }
+
+.input__error{
+  border-bottom: 1px solid red;
+  fill: red;
+}
+
 
 @include desktop{
   .connect-body{
@@ -169,7 +171,7 @@
     text-align: center;
   }
 
-  .person-info-label,
+  .person-info-name-label,
   .person-info-mail,
   .connect-message{
     padding-left: 0px;

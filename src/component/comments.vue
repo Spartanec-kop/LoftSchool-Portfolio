@@ -13,7 +13,9 @@
       .comments-body
         -var comments=[{name:'Ковальчук Дмитрий',avatar:'kovalchuc',position:'Основатель LoftSchool',text:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!'},{name:'Владимир Сабанцев',avatar:'sabancev',position:'Преподаватель',text:'Этот код выдержит любые испытания. Только пожалуйста, не загружайте сайт на слишком старых браузерах'}];
         .comments-items
-          comment(v-for="comment of this.showingComment" :comment="comment")
+          comment(v-for="(comment, index) of this.showingComment" 
+          :comment="comment"
+          :key="index")
           
 </template>
 
