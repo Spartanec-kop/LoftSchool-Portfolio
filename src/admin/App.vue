@@ -2,7 +2,9 @@
 .wrapper.admin-wrapper
   .maincontent
     header-admin
-    main-menu
+    main-menu(
+      @changeContent="changeContent"
+    )
     .content
 </template>
 <script>
@@ -13,7 +15,17 @@ import myWorks from "./components/myWorks"
 import comments from "./components/comments"
 export default {
   components:{'header-admin':headerAdmin, 'main-menu':mainMenu, about, 'my-works':myWorks, comments},
-  name: 'App'
+  name: 'App',
+  data(){
+    return{
+      activeContent:'about'
+    }
+  },
+  methods:{
+    changeContent(content){
+      this.activeContent = content;
+    }
+  }
 }
 </script>
 <style src="../styles/main.pcss" lang="postcss"></style>

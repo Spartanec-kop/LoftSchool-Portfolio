@@ -13,11 +13,6 @@
 <script>
 export default {
   name: 'header',
-  methods:{
-    createImageUrl(pictureName){
-      return require(`images/content/${pictureName}`);
-    }
-  }
 }
 
 </script>
