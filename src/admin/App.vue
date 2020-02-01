@@ -6,6 +6,18 @@
       @changeContent="changeContent"
     )
     .content
+      .content-background
+        img.background-img(:src="this.$importImg('content/baloonAdmin.jpg')")
+      about(
+        v-if="activeContent == 'about'"
+      )
+      my-works(
+        v-if="activeContent == 'works'"
+      )
+      comments(
+        v-if="activeContent == 'comment'"
+      )
+
 </template>
 <script>
 import headerAdmin from "./components/headerAdmin"
@@ -30,5 +42,21 @@ export default {
 </script>
 <style src="../styles/main.pcss" lang="postcss"></style>
 <style lang="postcss">
+.content{
+  position: relative;
+  background: 
+}
+.content-background{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: -1;
+}
 
+.background-img{
+  object-fit: cover;
+  width: 100%;
+  opacity: 0.1;
+}
 </style>

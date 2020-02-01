@@ -1,5 +1,5 @@
 <template lang="pug">
-
+  div comments
 </template>
 <script>
 export default {
