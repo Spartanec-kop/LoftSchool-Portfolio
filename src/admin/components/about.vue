@@ -4,7 +4,9 @@
     .title
       .title-text 
         span Блок «Обо мне»
-      .add-button
+      .add-button(
+        @click="addNewSkillGroup"
+      )
         .plus_wrapper
           plus
         .button-text
@@ -68,6 +70,14 @@ export default {
         }
       ]
     }
+  },
+  methods:{
+    addNewSkillGroup(){
+      this.skillGroups.unshift({
+          name: '',
+          skills:[]
+        })
+    }
   }
 }
 </script>
@@ -108,6 +118,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 20px;
+  row-gap: 20px;
 }
 
 .item{

@@ -5,12 +5,12 @@
         input.skill-group-name-input#gruop-name(
           placeholder="Название новой группы"
           :value="skillGroup.name"
-          :readOnly="editTitle ? false : true"
+          :readOnly="editTitleComputed ? false : true"
           ref="skillGroupName"
           )
       .button-set
         .edit-buttons(
-          v-if="editTitle"
+          v-if="editTitleComputed"
         )
           .apply(
             @click="editSkillGroupName"
@@ -20,7 +20,7 @@
           ) &#215;
         .edit(
             @click="editTitle = !editTitle"
-            v-if="!editTitle"
+            v-if="!editTitleComputed"
           )
             svg.skill-icon
               use(:xlink:href="this.$importSvg('pencil')")  
@@ -64,6 +64,11 @@ export default {
       editTitle: false,
     }
   },
+  computed:{
+    editTitleComputed(){
+      return this.editTitle || this.skillGroup.name.length == 0
+    }
+  },
   methods:{
     editSkillGroupName(){
       this.skillGroup.name = this.$refs.skillGroupName.value;
@@ -88,6 +93,7 @@ export default {
 </script>
 <style lang="postcss" scoped>
 .skillGroup{
+  position: relative;
   padding:20px;
   background-color: white;
 }
@@ -136,6 +142,10 @@ export default {
   opacity: 0.15;
 }
 
+.group-body{
+  padding-bottom: 140px;
+}
+
 .apply{
   color: #00d70a;
   font-size: 20px;
@@ -153,10 +163,13 @@ export default {
   cursor: pointer;
 }
 .add-skill{
+  position: absolute;
+  right: 31px;
+  bottom: 31px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-top: 70px;
+  /* padding-top: 70px; */
 }
 
 .new-skill{
