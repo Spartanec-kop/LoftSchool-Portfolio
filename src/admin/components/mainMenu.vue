@@ -5,6 +5,7 @@
       li.navigate__item(
         v-for="item of this.navigateItem"
         @click="$emit('changeContent', item.section)"
+        :class="active == item.section ? 'active' : ''"
         )
         a(class=`navigate__link`) {{item.title}}
             
@@ -13,6 +14,7 @@
 <script>
 export default {
   name: 'mainMenu',
+  props:['active'],
   data(){
     return{
       navigateItem: [
@@ -50,6 +52,7 @@ export default {
   justify-content: center;
 
 }
+
 .navigate__item{
   border-bottom: 2px solid transparent;
   display: flex;
@@ -63,5 +66,15 @@ export default {
     color: #383bcf;
     color: $links-color
     }
+}
+
+.active{
+  border-bottom: 2px solid $links-color;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-align: center;
+    color: #383bcf;
+    color: $links-color
 }
 </style>

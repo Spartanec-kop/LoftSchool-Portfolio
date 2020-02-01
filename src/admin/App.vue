@@ -3,6 +3,7 @@
   .maincontent
     header-admin
     main-menu(
+      :active = "activeContent"
       @changeContent="changeContent"
     )
     .content
