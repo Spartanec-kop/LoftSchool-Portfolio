@@ -2,8 +2,12 @@
   .input.tooltip(
     :class="[firstClass, {'input__error':isInvalid}]")  
     label.input-label(:for="id") {{labelText}}          
-    div(:class="`${firstClass}-icon`")
-      svg.connect-icon
+    div(
+      :class="`${firstClass}-icon`"     
+      )
+      svg.connect-icon(
+        v-if="iconName"
+        )
         use(:xlink:href="createSvgUrl(iconName)")
       input.connect-input(
         :type="type" 

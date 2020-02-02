@@ -16,7 +16,7 @@ export default {
     font-weight: 600;
     line-height: 1;
     color: #ffffff;
-    background-image: linear-gradient(to top, #006aed, #3f35cb);
+    background-image: linear-gradient(to right, #006aed, #3f35cb);
     border-radius: 50%;
     justify-content: center;
     align-items: center;  

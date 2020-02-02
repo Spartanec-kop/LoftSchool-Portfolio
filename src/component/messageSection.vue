@@ -26,13 +26,7 @@
               :isInvalid="validation.hasError('mailValue')"
               :toolTipText="validation.firstError('mailValue')"
               @change="changeMail"
-            )                    
-            //- .person-info-mail
-            //-   label.input-label(for="connect-mail") Введите ваш email
-            //-   .person-info-mail-icon
-            //-     svg.connect-icon.person-info-mail-icon-icon
-            //-       use(:xlink:href="createSvgUrl('envelope')")
-            //-     input.connect-input.person-info-mail-input#connect-mail(type="email" required="true" name="connect-mail")           
+            )                              
           .connect-message.tooltip(:class="{'input__error':validation.hasError('messageValue')}")
             label.input-label(for="connect-message-text") Сообщение к письму
             .connect-message-text-icon
@@ -117,45 +111,6 @@ export default {
 </script>
 
 <style scoped>
-/* start ToolTip=================================================== */
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  visibility: visible;
-}
-.input-tooltip{
-visibility: hidden;
-padding: 10px;
-}
-/* Tooltip text */
-.tooltip .input-tooltip {
-  min-width: 30%;
-  max-width: 80%;
-  background-color: red;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
-}
 
-/* Show the tooltip text when you mouse over the tooltip container */
-.showed {
-  visibility: visible;
-}
-
-.tooltip .input-tooltip::after {
-  content: " ";
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent red transparent;
-}
-/* end ToolTip========================================================= */
 
 </style>
