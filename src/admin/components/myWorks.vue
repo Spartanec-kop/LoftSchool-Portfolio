@@ -12,11 +12,14 @@
           .edit-works-title-text Редактирование работы
         hr  
         .edit-works-body
-          .import-image-wrapper  
-            img.admin-edit-image-img(
-                v-if="currentWork.imageUrl"
-                :src="this.$importImg(`content/${currentWork.imageUrl}`)"
-                )
+          .import-image-wrapper 
+            .admin-preview(
+              v-if="currentWork.imageUrl"
+            )
+              img.admin-edit-image-img(                 
+                  :src="this.$importImg(`content/${currentWork.imageUrl}`)"
+                  )
+              .admin-preview-text  Изменить превью
             .import-image(
                 v-if="!currentWork.imageUrl"
               )
@@ -246,6 +249,14 @@ hr{
 .import-image,
 .works-description{
   padding:10px;
+}
+.admin-preview-text{
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 2.13;
+  color: #383bcf;
+  text-align: center;
+  padding-top: 30px;
 }
 .import-image-wrapper {
   width: 100%;
