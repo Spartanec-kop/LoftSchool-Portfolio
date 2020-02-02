@@ -15,6 +15,7 @@
       skillsGroup.item(
         v-for="item in skillGroups"
         :skillGroup="item"
+        :key="item.name"
       )
 </template>
 <script>

@@ -27,7 +27,7 @@ export default {
           title:'Работы'
         },
         {
-          section:'comment',
+          section:'reviews',
           title:'Отзывы'
         }
       ]

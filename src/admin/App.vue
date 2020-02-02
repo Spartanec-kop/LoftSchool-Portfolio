@@ -15,8 +15,8 @@
       my-works(
         v-if="activeContent == 'works'"
       )
-      comments(
-        v-if="activeContent == 'comment'"
+      reviews(
+        v-if="activeContent == 'reviews'"
       )
 
 </template>
@@ -25,9 +25,9 @@ import headerAdmin from "./components/headerAdmin"
 import mainMenu from "./components/mainMenu"
 import about from "./components/about"
 import myWorks from "./components/myWorks"
-import comments from "./components/comments"
+import reviews from "./components/reviews"
 export default {
-  components:{'header-admin':headerAdmin, 'main-menu':mainMenu, about, 'my-works':myWorks, comments},
+  components:{'header-admin':headerAdmin, 'main-menu':mainMenu, about, 'my-works':myWorks, reviews},
   name: 'App',
   data(){
     return{

@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  name: 'comments'
+  name: 'reviews'
 }
 </script>
 <style lang="postcss" scoped>

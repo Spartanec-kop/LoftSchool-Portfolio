@@ -2,7 +2,7 @@
   .skillGroup
     .group-title
       .group-title-input(:class="editTitle ? 'input-edited' : '' ")
-        input.skill-group-name-input#gruop-name(
+        input.skill-group-name-input(
           placeholder="Название новой группы"
           :value="skillGroup.name"
           :readOnly="editTitleComputed ? false : true"
@@ -35,13 +35,13 @@
         )
     .add-skill
       .new-skill
-        input.skill-name-input#skill-name(
+        input.skill-name-input(
           placeholder="Новый навык"
           ref="newSkillName"
           )
         
       .new-count
-        input.skill-count-input#skill-count(
+        input.skill-count-input(
             :value="100"
             ref="newSkillCount"
             )
