@@ -21,7 +21,7 @@
 <script>
 export default {
   name: 'admin-input',
-  props:['labelText', 'isInvalid', 'toolTipText', 'id', 'type', 'val'],
+  props:['labelText', 'isInvalid', 'toolTipText', 'id', 'type', 'val', 'text'],
   data(){
     return {
       tooltipText:'',
@@ -33,7 +33,13 @@ export default {
   },
   mounted(){
     this.value = this.val;
-  }
+  },
+  watch: {
+    // эта функция запускается при любом изменении вопроса
+    val: function (newQuestion, oldQuestion) {
+      this.value = this.val;
+    }
+  },
 }
 </script>
 <style lang="postcss" scoped>
@@ -56,6 +62,7 @@ export default {
 
 .admin-input-wrapper{
   padding: 10px 0;
+  height:100%;
 }
 .admin-input-input,
 .admin-input-textarea{
@@ -68,7 +75,7 @@ export default {
 }
 
 .admin-input-textarea{
-  min-height: 146px;
+  height: 80%;
   line-height: 1.88;
   border: 1px solid #dee4ed;
   padding: 20px;

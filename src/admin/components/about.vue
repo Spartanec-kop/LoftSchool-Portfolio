@@ -86,7 +86,7 @@ export default {
 .title{
   display: flex;
   align-items: center;
-  padding: 30px 0;
+  padding: 20px 0;
 }
 .add-button{
   display: flex;

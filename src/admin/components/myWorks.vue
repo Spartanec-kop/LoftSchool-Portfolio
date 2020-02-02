@@ -1,6 +1,6 @@
 <template lang="pug">
 .container
-  .about-wrapper
+  .works-wrapper
     .title
       .title-text 
         span Блок «Работы»
@@ -76,7 +76,9 @@
               tag.edit-tag(
                 v-for="tag in currentWork.tags"
                 :tag="tag"
+                :edit="true"
                 :key="currentWork.id + '_' + tag"
+                @removeTag="removeTag"
               )
         .edit-works-buttons
           .edit-works-cancel(
@@ -89,7 +91,7 @@
               text="СОХРАНИТЬ"
             )
       .works-list 
-        .add-new-work(
+        .add-new-work.works-list-item(
           @click="addNewWork"
         )
           .plus 
@@ -97,7 +99,7 @@
           .add-new-work-text
             span Добавить
             span работу  
-        work(
+        work.works-list-item(
           v-for="work in works"
           :work="work"
           :selected="currentWork && work.id == currentWork.id"
@@ -162,6 +164,15 @@ export default {
     }
   },
   methods:{
+    removeTag(val){
+      let tags = [...this.currentWork.tags]
+      tags.forEach((element, i) => {
+        if(element == val){
+          tags.splice(i, 1);
+        }
+      this.currentWork.tags = tags;
+      });
+    },
     nameChange(value){
       this.currentWork.name = value;
     },
@@ -173,13 +184,6 @@ export default {
     },
     tagsChange(value){
       this.currentWork.tags = value.split(', ');
-    },
-    currentIsEmpty(){
-      for(var key in this.currentWork)
-      {
-          return false;
-      }
-      return true;
     },
     selectWork(work){
       this.currentWork = {...work};
@@ -310,6 +314,9 @@ hr{
     margin-right: 0px;
   }
 }
+.desc-work{
+  height:190px;
+}
 .edit-works-buttons{
   display: flex;
   justify-content: flex-end;
@@ -333,6 +340,10 @@ hr{
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 30px;
   row-gap: 30px;
+}
+.works-list-item{
+  box-shadow: 4.1px 2.9px 20px 0 rgba(0, 0, 0, 0.07);
+  background-color: white;
 }
 .add-new-work{
   background-image: linear-gradient(to right, #006aed, #3f35cb);

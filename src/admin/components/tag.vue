@@ -1,12 +1,15 @@
 <template lang="pug">
   .admin-tag
     .admin-tag-text {{tag}}
-    .admin-tag-exit &#215;
+    .admin-tag-exit(
+      v-if="edit"
+      @click="$emit('removeTag', tag)"
+    ) &#215;
 </template>
 <script>
 export default {
   name: 'tag',
-  props:['tag']
+  props:['tag', 'edit']
 }
 </script>
 <style lang="postcss" scoped>
@@ -26,7 +29,7 @@ export default {
   cursor: pointer;
 }
 .admin-tag-text{
-  padding-left: 5px;
+  /* padding-left: 5px; */
   opacity: 0.7;
   font-size: 13px;
   font-weight: 600;

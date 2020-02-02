@@ -111,6 +111,41 @@ export default {
 </script>
 
 <style scoped>
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    visibility: visible;
+}
+.input-tooltip{
+  visibility: hidden;
+}
+/* Tooltip text */
+.tooltip .input-tooltip {
+    width: 80%;
+    background-color: red;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
 
+/* Show the tooltip text when you mouse over the tooltip container */
+ .showed {
+    visibility: visible;
+}
+
+.tooltip .input-tooltip::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent red transparent;
+}
 
 </style>
