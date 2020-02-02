@@ -14,7 +14,7 @@ export default {
   width: 100%;
   height: 100%;
   background-image: linear-gradient(to right, #006aed, #3f35cb);
-  border-radius: 25px;
+  border-radius: 30px;
   justify-content: center;
   align-items: center;  
   cursor: pointer;  
