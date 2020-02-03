@@ -220,6 +220,9 @@ export default {
 }
 </script>
 <style lang="postcss" scoped>
+.works-wrapper{
+  padding-bottom: 40px;
+}
 .title{
   display: flex;
   align-items: center;

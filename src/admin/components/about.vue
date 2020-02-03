@@ -83,6 +83,9 @@ export default {
 }
 </script>
 <style lang="postcss" scoped>
+.about-wrapper{
+  padding-bottom: 40px;
+}
 .title{
   display: flex;
   align-items: center;

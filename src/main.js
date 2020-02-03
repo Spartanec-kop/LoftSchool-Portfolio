@@ -4,7 +4,6 @@ if (process.env.NODE_ENV === "development") {
 }
 
 import "./scripts/parallax";
-//import "./scripts/sendComment";
 
 import Vue from 'vue';
 
