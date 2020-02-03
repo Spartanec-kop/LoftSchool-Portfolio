@@ -35,7 +35,6 @@ export default {
     this.value = this.val;
   },
   watch: {
-    // эта функция запускается при любом изменении вопроса
     val: function (newQuestion, oldQuestion) {
       this.value = this.val;
     }
