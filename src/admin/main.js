@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import axios from 'axios'
 
 import login from './components/login'
+import maincontent from "./components/maincontent"
 import picturePlugin from './utils/ImgSvg.plugin'
 import plus from './components/plus.vue'
 import fillButton from './components/fill-button.vue'
@@ -19,6 +20,7 @@ Vue.prototype.$axios = axios;
 
 const router = new VueRouter({
   routes:[
+    {path: '/', component: maincontent},
     {path: '/login', component: login}
   ]
 })

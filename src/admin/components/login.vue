@@ -1,34 +1,36 @@
 <template lang="pug">
-.login-wrapper
-  .login-body
-    .title 
-      span Авторизация
-    .form-wrapper
-      form.form-login(@submit.prevent="submit")     
-        imput-validate.login-input.login(
-          :iconName="'user'"
-          :labelText="'Логин'" 
-          :id="'login'"
-          :type="'text'"
-          :firstClass="'person-info-name'"
-          :value="login"
-          :isInvalid="validation.hasError('login')"
-          :toolTipText="validation.firstError('login')"
-          @change="changeLogin"
-        )
-        imput-validate.login-input.password(
-          :iconName="'key'"
-          :labelText="'Пароль'" 
-          :id="'password'"
-          :type="'password'"
-          :firstClass="'person-info-name'"
-          :value="password"
-          :isInvalid="validation.hasError('password')"
-          :toolTipText="validation.firstError('password')"
-          @change="changePassword"
-        )
-        button.button-wrapper 
-          span ОТПРАВИТЬ
+div
+  .content-background-black
+  .login-wrapper
+    .login-body
+      .title 
+        span Авторизация
+      .form-wrapper
+        form.form-login(@submit.prevent="submit")     
+          imput-validate.login-input.login(
+            :iconName="'user'"
+            :labelText="'Логин'" 
+            :id="'login'"
+            :type="'text'"
+            :firstClass="'person-info-name'"
+            :value="login"
+            :isInvalid="validation.hasError('login')"
+            :toolTipText="validation.firstError('login')"
+            @change="changeLogin"
+          )
+          imput-validate.login-input.password(
+            :iconName="'key'"
+            :labelText="'Пароль'" 
+            :id="'password'"
+            :type="'password'"
+            :firstClass="'person-info-name'"
+            :value="password"
+            :isInvalid="validation.hasError('password')"
+            :toolTipText="validation.firstError('password')"
+            @change="changePassword"
+          )
+          button.button-wrapper 
+            span ОТПРАВИТЬ
 </template>
 <script>
 import SimpleVueValidator from 'simple-vue-validator';
@@ -94,9 +96,11 @@ export default {
 }
 .login-wrapper{
   height: 100vh;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center; 
+  z-index: 10;
 }
 .login-body{
   width: 563px;
@@ -130,5 +134,16 @@ export default {
   &:hover{
     background-image: linear-gradient(to left, #ad00ed, #5500f2);
   }
+}
+.content-background-black {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  background-color: black;
+  opacity: 0.6;
+  z-index: -1;
 }
 </style>
