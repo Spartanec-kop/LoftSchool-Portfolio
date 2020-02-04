@@ -3,6 +3,7 @@ div
   .content-background-black
   .login-wrapper
     .login-body
+      .login-exit &#215;
       .title 
         span Авторизация
       .form-wrapper
@@ -88,7 +89,7 @@ export default {
 
 <style lang="postcss" scoped>
 .title{
-  padding:40px 0px;
+  padding-bottom: 40px;
   text-align:center;
   font-size: 36px;
   font-weight: 600;
@@ -101,6 +102,15 @@ export default {
   justify-content: center;
   align-items: center; 
   z-index: 10;
+}
+.login-exit {
+  text-align: end;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 0.8;
+  margin-top: 30px;
+  margin-right: 30px;
+  cursor: pointer;
 }
 .login-body{
   width: 563px;
