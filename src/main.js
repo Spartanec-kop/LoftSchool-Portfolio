@@ -6,21 +6,28 @@ if (process.env.NODE_ENV === "development") {
 import "./scripts/parallax";
 
 import Vue from 'vue';
-import skills from "./component/skills.vue"
-import comments from "./component/comments.vue"
-import myWorks from "./component/myWorks.vue"
+
+import skills from "./component/skills";
+import comments from "./component/comments";
+import myWorks from "./component/myWorks";
+import messageSection from "./component/messageSection";
 
 new Vue({
   el:"#section4-body",
   components:{myworks: myWorks}
-})
+});
 
 new Vue({
   el:"#appSkills",
   components:{skills}
-})
+});
 
 new Vue({
   el:"#comments",
   components:{comments}
-})
+});
+
+new Vue({
+  el:"#connect",
+  components:{'message-section': messageSection}
+});
