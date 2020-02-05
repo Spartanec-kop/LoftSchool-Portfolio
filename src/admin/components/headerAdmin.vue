@@ -7,12 +7,26 @@
         .header-text  
           .name Павел Варнавский
           .title Панель администратора
-          .logout Выйти
+          .logout(
+            @click="logout"
+          ) Выйти
 </template>
 
 <script>
 export default {
   name: 'header',
+  methods:{
+    logout(){
+      this.$axios.post('/logout')
+      .then(response =>{
+        console.log(response.data)
+        this.$router.push({name:'login'});
+      })
+      .catch( error => {
+        console.log(error)
+      });
+    }
+  }
 }
 
 </script>
@@ -67,5 +81,6 @@ export default {
   letter-spacing: normal;
   text-decoration: underline;
   margin-left:auto;
+  cursor: pointer;
 }
 </style>

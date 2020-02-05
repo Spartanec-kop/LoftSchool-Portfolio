@@ -64,21 +64,21 @@ export default {
       this.password = val;
     },
     submit(){
-      var self = this;
       this.$validate()
-        .then(function (success) {
+        .then(async(success) => {
           if (success) {
-           self.$axios.post('/login', {
-             name:self.login,
-             password: self.password
-           })
-           .then(response => {
+            this.$axios.post('/login', {
+              name:this.login,
+              password: this.password
+            })
+            .then(response => {
              localStorage.setItem('token', response.data.token);
-             self.$token = response.data.token;
-             document.location.href = "admin#";
+             this.$token = response.data.token;
+             this.$axios.defaults.headers["Authorization"] = `Bearer ${response.data.token}`;
+             this.$router.push({name:'home'});
            })
            .catch(error => {
-             console.log(error.response.data)
+             console.log(error)
            })
           }
         });

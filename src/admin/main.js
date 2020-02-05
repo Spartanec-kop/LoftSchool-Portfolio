@@ -2,6 +2,8 @@ import Vue from 'vue';
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import axios from 'axios'
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 import login from './components/login'
 import maincontent from "./components/maincontent"
@@ -20,9 +22,49 @@ Vue.prototype.$axios = axios;
 
 const router = new VueRouter({
   routes:[
-    {path: '/', component: maincontent},
-    {path: '/login', component: login}
+    {
+      path: '/',
+      name: 'home',
+      component: maincontent
+    },
+    { 
+      path: '/login',
+      name:'login', 
+      component: login
+    }
   ]
+})
+async function isAuthenticated(){
+  let result = false;
+  if (localStorage.getItem('token')){
+    await axios.get('/user')
+    .then(response =>{
+      result = true;
+    })
+    .catch( error => {
+      result = false;
+    });
+  }
+  else{
+    result = false;
+  }
+  return result
+}
+router.beforeEach((to, from, next) => {
+  if (to.path != '/login') {
+    !isAuthenticated()
+    .then(result => {
+      if (!result){
+        next('/login')
+      }
+      else{
+        next()
+      }
+    })    
+  }
+  else {
+    next()
+  }
 })
 
 Vue.component('plus', plus);
