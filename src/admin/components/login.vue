@@ -30,7 +30,10 @@ div
             :toolTipText="validation.firstError('password')"
             @change="changePassword"
           )
-          button.button-wrapper 
+          button.button-wrapper(
+            :class="disableButton() ? 'buttonDisabled' : '' "
+            :disabled="disableButton()"
+          )
             span ОТПРАВИТЬ
 </template>
 <script>
@@ -48,6 +51,9 @@ export default {
       password:''
     }
   },
+  computed:{
+    
+  },
   validators:{
     login:function(value){
       return Validator.value(value).required('Поле не должно быть пустым');
@@ -57,6 +63,9 @@ export default {
     },
   },
   methods:{
+    disableButton(){
+      return this.validation.hasError('password') || this.validation.hasError('login')
+    },
     changeLogin(val){
       this.login = val;
     },
@@ -78,7 +87,7 @@ export default {
              this.$router.push({name:'home'});
            })
            .catch(error => {
-             console.log(error)
+             console.log(error.response)
            })
           }
         });
@@ -155,5 +164,12 @@ export default {
   background-color: black;
   opacity: 0.6;
   z-index: -1;
+}
+.buttonDisabled{
+  opacity: 0.5;
+  cursor:default;
+  &:hover{
+    background-image: linear-gradient(to right, #ad00ed, #5500f2);
+  }
 }
 </style>
