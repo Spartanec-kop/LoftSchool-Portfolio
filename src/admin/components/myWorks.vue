@@ -14,32 +14,41 @@
         .edit-works-body
           .import-image-wrapper 
             .admin-preview(
-              v-if="currentWork.imageUrl"
+              v-if="currentWork.photo"
             )
-              img.admin-edit-image-img(                 
-                  :src="this.$importImg(`content/${currentWork.imageUrl}`)"
+              img.admin-edit-image-img#edit-img-preview(                 
+                  :src="this.$baseUrl + currentWork.photo"
                   )
-              .admin-preview-text  Изменить превью
+              .admin-preview-text(
+                @click="uploadImage"
+              )  Изменить превью
             .import-image(
-                v-if="!currentWork.imageUrl"
+                v-if="!currentWork.photo"
               )
               .import-image-content
                 .import-image-text
                   span Перетащите или загрузите
                   br
                   span для загрузки изображения
-                .fill-button-wrapper
+                .fill-button-wrapper(
+                  @click="uploadImage"
+                )
                   fill-button(
                     text="ЗАГРУЗИТЬ"
                   )
+          input#work-photo(
+            type="file"
+            ref="workImage"
+            @change="changeImgFile"
+          )        
           .works-description
             admin-input.name-work(
               :labelText="'Название'"
               :isInvalid="false"
               :toolTipText="'toolTipText'"
-              :id="'name-work'"
+              :id="'title-work'"
               :type="'input'"
-              :val="currentWork.name"
+              :val="currentWork.title"
               @change="nameChange"
             )
 
@@ -59,7 +68,7 @@
               :toolTipText="'toolTipText'"
               :id="'desc-work'"
               :type="'textarea'"
-              :val="currentWork.desc"
+              :val="currentWork.description"
               @change="descChange"
             )
 
@@ -69,12 +78,12 @@
               :toolTipText="'toolTipText'"
               :id="'tags-work'"
               :type="'input'"
-              :val="currentWork.tags.join(', ')"
+              :val="currentWork.techs"
               @change="tagsChange"
             )
             .admin-tags
               tag.edit-tag(
-                v-for="tag in currentWork.tags"
+                v-for="tag in currentWork.techs.split(', ')"
                 :tag="tag"
                 :edit="true"
                 :key="currentWork.id + '_' + tag"
@@ -118,88 +127,101 @@ export default {
   data(){
     return{
       currentWork: null,
-      works:[
-        {
-          id:1,         
-          name: 'Сайт школы образования',
-          imageUrl: '1.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-
-        },
-        {
-          id:2,
-          name: 'Сайт школы образования',
-          imageUrl: '2.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-        {
-          id:3,
-          name: 'Сайт школы образования',
-          imageUrl: '3.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-        {
-          id:4,
-          name: 'Сайт школы образования',
-          imageUrl: '4.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-        {
-          id:5,
-          name: 'Сайт школы образования',
-          imageUrl: '5.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-      ],
+      //newEditImage:false,
+      works:[],
     }
   },
   methods:{
     removeTag(val){
-      let tags = [...this.currentWork.tags]
+      let tags = this.currentWork.techs.split(', ')
       tags.forEach((element, i) => {
         if(element == val){
           tags.splice(i, 1);
         }
-      this.currentWork.tags = tags;
+      this.currentWork.techs = tags.join(', ');
       });
     },
+    uploadImage(){
+      this.$refs.workImage.click();
+    },
+    changeImgFile(e){
+      this.currentWork.photo = e.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function(event) {
+        var imgtag = document.getElementById("edit-img-preview");;
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(this.currentWork.photo);
+    },
     nameChange(value){
-      this.currentWork.name = value;
+      this.currentWork.title = value;
     },
     linkChange(value){
       this.currentWork.link = value;
     },
     descChange(value){
-      this.currentWork.desc = value;
+      this.currentWork.description = value;
     },
     tagsChange(value){
-      this.currentWork.tags = value.split(', ');
+      this.currentWork.techs = value;
     },
     selectWork(work){
       this.currentWork = {...work};
     },
     removeWork(work){
-      this.works.splice(this.works.indexOf(work), 1);
+      this.$axios.delete(`/works/${work.id}`)
+        .then(Response => {
+          this.works.splice(this.works.indexOf(work), 1);
+        })
+        .catch(error => {
+          console.log(error.Response);
+        });
     },
     cancelEdit(){
       this.currentWork = null;
     },
     saveEdit(){
       if(!this.currentWork.id){
-        this.currentWork.id = this.works[this.works.length - 1].id + 1;
-        this.works.push(this.currentWork);
+        var formData = new FormData();
+        formData.append("title", this.currentWork.title);
+        formData.append("techs", this.currentWork.techs);
+        formData.append("photo", this.currentWork.photo);
+        formData.append("link", this.currentWork.link);
+        formData.append("description", this.currentWork.description);
+        this.$axios.post(`/works`, formData, {
+                                        headers: {
+                                          'Content-Type': 'multipart/form-data'
+                                        }
+          })
+        .then(Response => {
+          this.works.push(Response.data);
+        })
+        .catch(error => {
+          console.log(error.Response);
+        });
+        
       }
       else{
+        var formData = new FormData();
+        formData.append("title", this.currentWork.title);
+        formData.append("techs", this.currentWork.techs);
+        formData.append("photo", this.currentWork.photo);
+        formData.append("link", this.currentWork.link);
+        formData.append("description", this.currentWork.description);
+        this.$axios.post(`/works/${this.currentWork.id}`, formData, {
+                                        headers: {
+                                          'Content-Type': 'multipart/form-data'
+                                        }
+          })
+        .then(Response => {
+          //this.works.push(Response.data.work);
+        })
+        .catch(error => {
+          console.log(error.Response);
+        });
+
         let tmp = this.works.find(f => f.id == this.currentWork.id); 
         this.works[this.works.indexOf(tmp)] = this.currentWork;
       }
@@ -208,18 +230,30 @@ export default {
     addNewWork(){
       this.currentWork = {
           id:null,         
-          name: '',
-          imageUrl: '',
+          title: '',
+          photo: null,
           link:'',
-          desc:'',
-          tags:[]
+          description:'',
+          techs:''
 
         };
     }
+  },
+  beforeMount(){
+    this.$axios.get(`/works/${this.$user.id}`)
+    .then(Response => {
+      this.works = Response.data;
+    })
+    .catch(error => {
+      console.log(error.Response);
+    });
   }
 }
 </script>
 <style lang="postcss" scoped>
+#work-photo{
+  display: none;
+}
 .works-wrapper{
   padding-bottom: 40px;
 }
@@ -264,6 +298,7 @@ hr{
   color: #383bcf;
   text-align: center;
   padding-top: 30px;
+  cursor: pointer;
 }
 .import-image-wrapper {
   width: 100%;

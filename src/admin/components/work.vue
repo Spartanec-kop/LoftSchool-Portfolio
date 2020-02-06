@@ -1,16 +1,16 @@
 <template lang="pug">
   .admin-work(:class="selected ? 'selected' : ''")
     .admin-work-image
-      img.admin-work-image-img(:src="work.imageUrl ? this.$importImg(`content/${work.imageUrl}`): ''")
+      img.admin-work-image-img(:src="work.photo ? this.$baseUrl + work.photo : ''")
       .admin-work-tags
         tag.edit-tag(
-          v-for="tag in work.tags"
+          v-for="tag in work.techs.split(', ')"
           :tag="tag"
           :key="work.id + '_' + tag"
         )
     .admin-work-body 
-      .admin-work-name {{work.name}}
-      .admin-work-desc {{work.desc}}
+      .admin-work-name {{work.title}}
+      .admin-work-desc {{work.description}}
       .admin-work-link
         a(:href="work.link" target="_blank") {{work.link}}
       .admin-work-buttons
@@ -41,6 +41,11 @@ export default {
 }
 </script>
 <style lang="postcss" scoped>
+.admin-work{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 .admin-work-image{
   position: relative;
 }
@@ -62,7 +67,10 @@ export default {
 }
 .admin-work-body{
   padding: 40px 30px;
-
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
 }
 .admin-work-name{
   font-size: 18px;
@@ -93,6 +101,7 @@ export default {
   display: flex;
   justify-content: space-between;
   padding-top: 40px;
+
 }
 .admin-work-buttons-edit,
 .admin-work-buttons-remove{

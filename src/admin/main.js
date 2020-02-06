@@ -12,7 +12,7 @@ import plus from './components/plus.vue'
 import fillButton from './components/fill-button.vue'
 import adminInput from './components/adminInput'
 
-const baseUrl = "https://webdev-api.loftschool.com/";
+const baseUrl = Vue.prototype.$baseUrl = "https://webdev-api.loftschool.com/";
 Vue.prototype.$token = localStorage.getItem('token') || '';
 
 axios.defaults.baseURL = baseUrl;
@@ -39,6 +39,7 @@ async function isAuthenticated(){
   if (localStorage.getItem('token')){
     await axios.get('/user')
     .then(response =>{
+      Vue.prototype.$user = response.data.user
       result = true;
     })
     .catch( error => {
