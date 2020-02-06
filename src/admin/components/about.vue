@@ -13,9 +13,9 @@
           span Добавить группу
     .about-body            
       skillsGroup.item(
-        v-for="item in skillGroups"
-        :skillGroup="item"
-        :key="item.name"
+        v-for="item in categories"
+        :defaultCategory="item"
+        :key="item.id"
       )
 </template>
 <script>
@@ -26,59 +26,24 @@ export default {
   name: 'about',
   data(){
     return{
-      skillGroups:[
-        {
-          name: 'Workflow',
-          skills:[
-            {
-              title: 'Git',
-              count: 100
-            },
-            {
-              title: 'Terminal',
-              count: 10
-            },
-            {
-              title: 'Gulp',
-              count: 80
-            },
-            {
-              title: 'Webpack',
-              count: 70
-            },
-          ]
-        },
-        {
-          name: 'Front-end',
-          skills:[
-            {
-              title: 'HTML4',
-              count: 100
-            },
-            {
-              title: 'CSS3',
-              count: 10
-            },
-            {
-              title: 'JavaScript',
-              count: 80
-            },
-            {
-              title: 'jquery и Vue.js',
-              count: 70
-            },
-          ]
-        }
-      ]
+      categories:[]
     }
   },
   methods:{
     addNewSkillGroup(){
-      this.skillGroups.unshift({
-          name: '',
-          skills:[]
-        })
-    }
+      this.categories.unshift({
+            category: '',
+          })
+      }
+  },
+  beforeMount(){
+    this.$axios.get('/categories')
+    .then(Response => {
+      this.categories = Response.data;
+    })
+    .catch(error => {
+      console.log(error.Response);
+    });
   }
 }
 </script>

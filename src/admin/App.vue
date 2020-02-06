@@ -16,20 +16,6 @@ export default {
     return{
       
     }
-  },
-  created(){
-    // if(this.$token){
-    //   this.$axios.get('/user')
-    //   .then(response =>{
-    //     this.authorized = true;
-    //   })
-    //   .catch( error => {
-    //     document.location.href = "admin#/login";
-    //   });
-    // }
-    // else{
-    //   document.location.href = "admin#/login";
-    // }
   }
 }
 </script>
