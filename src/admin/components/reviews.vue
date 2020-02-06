@@ -14,10 +14,18 @@
         .edit-reviews-body
           .edit-reviews-avatar
             .edit-reviews-image
-              img.admin-edit-reviews-avatar-img(                 
-                  :src="this.$importImg(`content/${currentReview && currentReview.avatar ? currentReview.avatar: 'emptiAvatar.jpg'}`)"
+              img.admin-edit-reviews-avatar-img#edit-avatar-preview(  
+                  ref="reviewAvatar"               
+                  :src="getAvatar()"
                   )
-            .edit-reviews-avatar-text {{currentReview && currentReview.avatar ? 'Изменить фото' : 'Добавить фото'}}
+            input#reviews-photo(
+              type="file"
+              ref="reviewImage"
+              @change="changeImgFile"
+            )      
+            .edit-reviews-avatar-text(
+              @click="uploadImage"
+            ) {{currentReview && currentReview.photo ? 'Изменить фото' : 'Добавить фото'}}
           .edit-reviews-comment  
             .edit-reviews-revier
               .edit-reviews-name
@@ -27,8 +35,8 @@
                   :toolTipText="'toolTipText'"
                   :id="'reviews-name'"
                   :type="'input'"
-                  :val="currentReview.name"
-                  @change="nameChange"
+                  :val="currentReview.author"
+                  @change="authorChange"
                 )
               .edit-reviews-position
                 admin-input.reviews-position(
@@ -37,8 +45,8 @@
                   :toolTipText="'toolTipText'"
                   :id="'reviews-position'"
                   :type="'input'"
-                  :val="currentReview.position"
-                  @change="positionChange"
+                  :val="currentReview.occ"
+                  @change="occChange"
                 )
             .edit-reviews-message
               admin-input.reviews-message(
@@ -87,66 +95,90 @@ export default {
   data(){
     return{
       currentReview: null,
-      reviews:[
-        {
-          id:1,
-          name:'Ковальчук Дмитрий',
-          avatar:'kovalchuc.jpg',
-          position:'Основатель LoftSchool',
-          text:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!'
-        },
-        {
-          id:2,
-          name:'Владимир Сабанцев',
-          avatar:'sabancev.jpg',
-          position:'Преподаватель',
-          text:'Этот код выдержит любые испытания. Только пожалуйста, не загружайте сайт на слишком старых браузерах'
-        },
-        {
-          id:3,
-          name:'Иван Иванов',
-          avatar:'ivanov.jpg',
-          position:'Преподаватель',
-          text:'Очень большой комментарий от преподавателя Иванова Ивана Ивановича'
-        },
-        {
-          id:4,
-          name:'Петр Петров',
-          avatar:'petrov.jpg',
-          position:'Преподаватель',
-          text:'Этот комментарий оставил преподаватель Петров Петр Петрович и он очень этим доволен'
-        },
-        {
-          id:5,
-          name:'Тест Тестов',
-          avatar:'testov.jpg',
-          position:'Преподаватель',
-          text:'Меня зовут Тестов Тест Тестович и это я оставил свой комментарий на сайте этого разработчика.'
-        }
-
-      ]
+      reviews:[]
     }
   },
   methods:{
     cancelEdit(){
       this.currentReview = null;
     },
-    saveEdit(){
-      if(!this.currentReview.id){
-        this.currentReview.id = this.reviews[this.reviews.length - 1].id + 1;
-        this.reviews.push(this.currentReview);
+    uploadImage(){
+      this.$refs.reviewImage.click();
+    },
+    changeImgFile(e){
+      this.currentReview.photo = e.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function(event) {
+        var imgtag = document.getElementById("edit-avatar-preview");
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(this.currentReview.photo)
+    },
+    getAvatar(){
+      if (typeof(this.currentReview.photo) == 'Object'){
+        var reader = new FileReader();
+
+        reader.onload = function(event) {
+        var imgtag = document.getElementById("edit-avatar-preview");
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(this.currentReview.photo)
+      }
+      if (this.currentReview && this.currentReview.id){
+        return this.$baseUrl + this.currentReview.photo
       }
       else{
-        let tmp = this.reviews.find(f => f.id == this.currentReview.id); 
-        this.reviews[this.reviews.indexOf(tmp)] = this.currentReview;
+        return this.$importImg(`content/emptiAvatar.jpg`)
       }
-      this.currentReview = null;
     },
-    nameChange(value){
-      this.currentReview.name = value;
+    saveEdit(){
+      if(!this.currentReview.id){
+        var formData = new FormData();
+        formData.append("author", this.currentReview.author);
+        formData.append("occ", this.currentReview.occ);
+        formData.append("photo", this.currentReview.photo);
+        formData.append("text", this.currentReview.text);
+        this.$axios.post(`/reviews`, formData, {
+                                        headers: {
+                                          'Content-Type': 'multipart/form-data'
+                                        }
+          })
+        .then(Response => {
+          this.reviews.push(Response.data);
+        })
+        .catch(error => {
+          console.log(error.Response);
+        });
+      }
+      else{
+        var formData = new FormData();
+        formData.append("author", this.currentReview.author);
+        formData.append("occ", this.currentReview.occ);
+        formData.append("photo", this.currentReview.photo);
+        formData.append("text", this.currentReview.text);
+        this.$axios.post(`/reviews/${this.currentReview.id}`, formData, {
+                                        headers: {
+                                          'Content-Type': 'multipart/form-data'
+                                        }
+          })
+        .then(Response=>{
+          let tmp = this.reviews.find(f => f.id == this.currentReview.id); 
+          this.reviews[this.reviews.indexOf(tmp)] = Response.data.review;
+          this.currentReview = null;
+          })
+        .catch(error => {
+          console.log(error.Response);
+        });
+      }
     },
-    positionChange(value){
-      this.currentReview.position = value;
+    authorChange(value){
+      this.currentReview.author = value;
+    },
+    occChange(value){
+      this.currentReview.occ = value;
     },
     messageChange(value){
       this.currentReview.text = value;
@@ -154,22 +186,43 @@ export default {
     addNewreviews(){
       this.currentReview = {
         id:null,
-        name:'',
-        avatar:'',
-        position:'',
-        text:''
+        photo: null,
+        author: '',
+        occ: '',
+        text: '',
       }
     },
     selectReview(review){
       this.currentReview = {...review};
     },
     removeReview(review){
-      this.reviews.splice(this.reviews.indexOf(review), 1);
+        this.$axios.delete(`/reviews/${review.id}`)
+        .then(Response => {
+          this.reviews.splice(this.reviews.indexOf(review), 1);
+        })
+        .catch(error => {
+          console.log(error.Response);
+        });
+    },
+    getContent(){
+      this.$axios.get(`/reviews/${this.$user.id}`)
+      .then(Response => {
+        this.reviews = Response.data;
+    })
+    .catch(error => {
+      console.log(error.Response);
+    });
     }
+  },
+  beforeMount(){
+    this.getContent();
   }
 }
 </script>
 <style lang="postcss" scoped>
+#reviews-photo{
+  display: none;
+}
 .reviews-wrapper{
   padding-bottom: 40px;
 }
@@ -218,6 +271,7 @@ hr{
   line-height: 2.13;
   color: #383bcf;
   text-align: center;
+  cursor: pointer;
 }
 .edit-reviews-revier{
   display: grid;

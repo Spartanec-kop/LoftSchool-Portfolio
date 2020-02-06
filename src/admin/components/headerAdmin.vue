@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'header',
+  name: 'header-admin',
   methods:{
     logout(){
       this.$axios.post('/logout')

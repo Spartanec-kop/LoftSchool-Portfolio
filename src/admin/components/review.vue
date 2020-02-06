@@ -2,10 +2,10 @@
   .admin-review(:class="selected ? 'selected' : ''")
     .admin-review-title
       img.admin-review-avatar-img(
-        :src="this.$importImg(`content/${review.avatar ? review.avatar: 'emptiAvatar.jpg'}`)")
+        :src="this.$baseUrl + review.photo")
       .admin-review-person
-        .admin-review-name {{review.name}}
-        .admin-review-position {{review.position}}
+        .admin-review-name {{review.author}}
+        .admin-review-position {{review.occ}}
     hr
     .admin-review-body 
       .admin-review-message {{review.text}}     
@@ -80,6 +80,7 @@ hr{
   display: flex;
   justify-content: space-between;
   padding-top: 40px;
+  padding-bottom: 20px;
 }
 .admin-review-buttons-edit,
 .admin-review-buttons-remove{

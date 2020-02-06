@@ -127,7 +127,6 @@ export default {
   data(){
     return{
       currentWork: null,
-      //newEditImage:false,
       works:[],
     }
   },
@@ -216,16 +215,14 @@ export default {
                                         }
           })
         .then(Response => {
-          //this.works.push(Response.data.work);
+          let tmp = this.works.find(f => f.id == this.currentWork.id); 
+          this.works[this.works.indexOf(tmp)] = this.Response.data.work;
+          this.currentWork = null;
         })
         .catch(error => {
           console.log(error.Response);
         });
-
-        let tmp = this.works.find(f => f.id == this.currentWork.id); 
-        this.works[this.works.indexOf(tmp)] = this.currentWork;
-      }
-      this.currentWork = null;
+      }      
     },
     addNewWork(){
       this.currentWork = {
