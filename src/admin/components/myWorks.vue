@@ -215,8 +215,8 @@ export default {
                                         }
           })
         .then(Response => {
-          let tmp = this.works.find(f => f.id == this.currentWork.id); 
-          this.works[this.works.indexOf(tmp)] = this.Response.data.work;
+          let tmp = this.works.find(f => f.id == this.currentWork.id);
+          this.works[this.works.indexOf(tmp)] = Response.data.work;
           this.currentWork = null;
         })
         .catch(error => {
