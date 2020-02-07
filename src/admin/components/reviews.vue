@@ -148,6 +148,7 @@ export default {
           })
         .then(Response => {
           this.reviews.push(Response.data);
+          this.currentReview = null;
         })
         .catch(error => {
           console.log(error.Response);
