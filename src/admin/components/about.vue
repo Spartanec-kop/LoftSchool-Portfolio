@@ -37,7 +37,7 @@ export default {
       }
   },
   beforeMount(){
-    this.$axios.get('/categories')
+    this.$axios.get('/categories/' + this.$user.id)
     .then(Response => {
       this.categories = Response.data;
     })

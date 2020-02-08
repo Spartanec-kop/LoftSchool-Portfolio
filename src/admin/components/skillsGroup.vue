@@ -27,7 +27,7 @@
     hr.spliter
     .group-body
       skill(
-        v-for="(item, i) in skills"
+        v-for="(item, i) in category.skills"
         :defaultSkill="item"
         :key="`${item.name}_${i}`"
         :iterator="i"
@@ -62,7 +62,6 @@ export default {
   data() {
     return{
       editTitle: false,
-      skills:[],
       category:[]
     }
   },
@@ -122,17 +121,6 @@ export default {
   },
   beforeMount(){
     this.category = {...this.defaultCategory}
-    this.$axios.get(`/skills/${this.category.user_id}`)
-    .then(Response => {
-      Response.data.forEach(obj => {
-        if (obj.category == this.category.id){
-          this.skills.push(obj)
-        }
-      });
-    })
-    .catch(error => {
-      console.log(error.Response);
-    });
   }
 }
 </script>
