@@ -19,7 +19,6 @@ export default {
     logout(){
       this.$axios.post('/logout')
       .then(response =>{
-        console.log(response.data)
         this.$router.push({name:'login'});
       })
       .catch( error => {
