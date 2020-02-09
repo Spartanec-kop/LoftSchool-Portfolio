@@ -4,15 +4,16 @@
       linearGradient#circleGradient(x1="0%" y1="0%" x2="100%" y2="0%")
         stop(offset="0%" stop-color="#4a00ed")
         stop(offset="100%" stop-color="#9300e8")
-    .skill-group-title(v-for="skillsGroup of skills") {{skillsGroup.title}}
+    .skill-group-title(v-for="category of categories") {{category.category}}
       .skill-group
-        skill(v-for="(item, index) of skillsGroup.skills" 
+        skill(v-for="(item, index) of category.skills" 
         :skill="item"
         :key="item.title + ' ' + index")
 </template>
 
 <script>
 import skill from './skill'
+import axios from './../requests'
 export default {
   components:{skill},
   name: 'skills',
@@ -21,51 +22,17 @@ export default {
   },
   data(){
     return{
-      skills:{
-        frontend:{
-          title:'Fron-end',
-          skills:{
-            html:{
-              title:'HTML5',
-              skillCount:50
-            },
-            css:{
-              title:'CSS3',
-              skillCount:30
-            },
-            js:{
-              title:'javascript',
-              skillCount:70
-            },
-            vue:{
-              title:'jquery и Vue.js',
-              skillCount:70
-            }
-          }
-        },
-        workflow:{
-          title:'Workflow',
-          skills:{
-            git:{
-              title:'GIT',
-              skillCount:80
-            },
-            terminal:{
-              title:'Terminal',
-              skillCount:50
-            },
-            Gulp:{
-              title:'Gulp',
-              skillCount:10
-            },
-            webpack:{
-              title:'Webpack',
-              skillCount:30
-            }
-          }
-        }
-      }
+      categories:{},
     }
+  },
+  created(){
+    axios.get('/categories/248')
+    .then(Response => {
+      this.categories = Response.data;
+    })
+    .catch(error => {
+      console.log(error.Response);
+    });
   }
 }
 </script>

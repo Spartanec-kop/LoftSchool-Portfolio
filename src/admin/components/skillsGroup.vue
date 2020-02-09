@@ -122,7 +122,7 @@ export default {
                                   category: this.category.id
                                   })
         .then(Response => {
-          this.skills.push(Response.data)
+          this.category.skills.push(Response.data)
         })
         .catch(error => {
           console.log(error.Response);
