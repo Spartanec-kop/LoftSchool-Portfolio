@@ -18,7 +18,6 @@ export default {
   components:{skill},
   name: 'skills',
   props:{
-    //skills:Object
   },
   data(){
     return{

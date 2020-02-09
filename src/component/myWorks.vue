@@ -1,37 +1,58 @@
 <template lang="pug"> 
-  .slider
-    .slider-main-window
-      img.sl-img.main-img(:src="activeItem.imageUrl ? createImageUrl(activeItem.imageUrl) : ''")
-      slidertape(
-        :works="showingPreview()" 
-        :activeItem="activeItem"
-        v-on:select-work="changeActiveItem"
-        :v-if="showSlidertape"
-        )
-    .slider-buttons
-      button.slider-button.slider-button__up(
-        @click="changeUp"
-        :disabled="upButtonDisabled()"
-        :class="upButtonDisabled() ? 'slider-disable' : '' "
-      )
-        svg.slider-button-icon__up(
-          :class="upButtonDisabled() ? 'slider-disable' : '' "
-        )
-          use(:xlink:href="createSvgUrl('arrow-down')")
-      button.slider-button.slider-button__down(
-        @click="changeDown"
-        :disabled="downButtonDisabled()"
-        :class="downButtonDisabled() ? 'slider-disable' : '' "
-      )
-        svg.slider-button-icon__down(
-          :class="downButtonDisabled() ? 'slider-disable' : '' "
-        )
-          use(:xlink:href="createSvgUrl('arrow-down')")
-    .number {{activeItem.id}}    
+.section.section4
+  .container
+    .section4-title#section4 Мои работы
+    .section4-body
+      .slider
+        .slider-main-window
+          img.sl-img.main-img(:src="activeItem ? 'https://webdev-api.loftschool.com/' + activeItem.photo : ''")
+          slidertape(
+            :works="showingPreview()" 
+            :activeItem="activeItem"
+            v-on:select-work="changeActiveItem"
+            :v-if="showSlidertape"
+            )
+        .slider-buttons
+          button.slider-button.slider-button__up(
+            @click="changeUp"
+            :disabled="upButtonDisabled()"
+            :class="upButtonDisabled() ? 'slider-disable' : '' "
+          )
+            svg.slider-button-icon__up(
+              :class="upButtonDisabled() ? 'slider-disable' : '' "
+            )
+              use(:xlink:href="createSvgUrl('arrow-down')")
+          button.slider-button.slider-button__down(
+            @click="changeDown"
+            :disabled="downButtonDisabled()"
+            :class="downButtonDisabled() ? 'slider-disable' : '' "
+          )
+            svg.slider-button-icon__down(
+              :class="downButtonDisabled() ? 'slider-disable' : '' "
+            )
+              use(:xlink:href="createSvgUrl('arrow-down')")
+        .number {{works.indexOf(activeItem) + 1}}    
+      .description
+          .description-tags
+            ul.tags-items
+              li.tag(
+                v-for="item in activeItem.techs.split(', ')"
+              )
+                .tag-text {{item}}
+          .description-title 
+            span {{activeItem.title}}
+          .description-body
+            span {{activeItem.description}}
+          .description-link
+            a.site(:href='activeItem.link' target="_blank")
+              svg.site-link
+                use(:xlink:href="createSvgUrl('link')")
+              span.site-link-title Посмотреть cайт 
 </template>
 <script>
 
 import sliderTape from "./sliderTape"
+import axios from './../requests'
 export default {
   components:{slidertape: sliderTape},
   name: "myWorks",
@@ -40,50 +61,24 @@ export default {
       activeItem: {},
       lastPreview:[],
       windowWidth:0,
-      works:[
-        {
-          id:1,
-          name: 'works1',
-          imageUrl: '1.jpg',
-          imagePreview: '1.jpg'
-        },
-        {
-          id:2,
-          name: 'works2',
-          imageUrl: '2.jpg',
-          imagePreview: '2.jpg'
-        },
-        {
-          id:3,
-          name: 'works3',
-          imageUrl: '3.jpg',
-          imagePreview: '3.jpg'
-        },
-        {
-          id:4,
-          name: 'works4',
-          imageUrl: '4.jpg',
-          imagePreview: '4.jpg'
-        },
-        {
-          id:5,
-          name: 'works5',
-          imageUrl: '5.jpg',
-          imagePreview: '5.jpg'
-        },
-      ],
+      works:[]
     }
   },
   computed:{
     
   },
 
-  mounted(){
-    this.activeItem = this.works[0];
-  },
-
   created() {
     window.addEventListener('resize', this.updateWidth);
+    axios.get('/works/248')
+    .then(Response => {
+      console.log(Response.data);
+      this.works = Response.data;
+      this.activeItem = Response.data[0];
+    })
+    .catch(error => {
+      console.log(error.Response);
+    });
   },
 
   methods:{
