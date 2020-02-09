@@ -1,5 +1,6 @@
 <template lang="pug">
-  .admin-skill
+  .admin-skill.tooltip
+    .input-tooltip(:class="{'showed':showError}") {{'не все поля заполнены'}}
     .name(:class="edit ? 'input-edited' : '' ")
       input.skill-name-input(
           :value="skill.title"
@@ -36,7 +37,7 @@
             @click="$emit('removeSkill', skill)"
           )
             svg.skill-icon
-              use(:xlink:href="this.$importSvg('trash')")
+              use(:xlink:href="this.$importSvg('trash')")          
 </template>
 <script>
 export default {
@@ -48,25 +49,34 @@ export default {
   data(){
     return{
       skill:{},
-      edit: false
+      edit: false,
+      showError:false
     }
   },
   methods:{
     editSkill(){
-      this.$axios.post(`/skills/${this.skill.id}`, {title: this.$refs[`skill-name__${this.iterator}`].value,
+      if (this.$refs[`skill-name__${this.iterator}`].value != '' &&
+          this.$refs[`skill-count__${this.iterator}`].value != ''){
+        this.$axios.post(`/skills/${this.skill.id}`, {title: this.$refs[`skill-name__${this.iterator}`].value,
                                                     percent: this.$refs[`skill-count__${this.iterator}`].value,
                                                     category: this.skill.category
                                                     })
-      .then(Response => {
-        this.skill = Response.data.skill
-      })
-      .catch(error => {
-        console.log(error.Response);
-      });
-      this.edit = false;
+                                                    .then(Response => {
+                                                      this.skill = Response.data.skill
+                                                    })
+                                                    .catch(error => {
+                                                      console.log(error.Response);
+                                                    });
+                                                    this.edit = false;
+                                                    this.showError = false;
+      }
+      else{
+        this.showError = true;
+      }                                                  
     },
     cancelEdit(){
       this.edit = false;
+      this.showError = false;
     }
   },
   beforeMount(){
@@ -75,6 +85,9 @@ export default {
 }
 </script>
 <style lang="postcss" scoped>
+.input-tooltip{
+  bottom: -100%;
+}
 .admin-skill{
   display: flex;
   justify-content: flex-start;

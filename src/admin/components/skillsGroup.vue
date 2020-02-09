@@ -1,22 +1,15 @@
 <template lang="pug">
   .skillGroup
     .group-title
-      .group-title-input(:class="editTitle ? 'input-edited' : '' ")
+      .group-title-input.tooltip(:class="editTitle ? 'input-edited' : '' ")
         input.skill-group-name-input(
           placeholder="Название новой группы"
-          :value="category.category"
+          
           :readOnly="editTitleComputed ? false : true"
+          v-model="categoryTitleValue"
           ref="skillGroupName"
           )
-        //- admin-input.title-skill-group(
-        //-       :labelText="''"
-        //-       :isInvalid="false"
-        //-       :toolTipText="'toolTipText'"
-        //-       :id="'titleskill-group'"
-        //-       :type="'input'"
-        //-       :val="category.category"
-        //-       @change="titleChange"
-        //-     )
+        .input-tooltip(:class="{'showed':validation.hasError('categoryTitleValue')}") {{validation.firstError('categoryTitleValue')}}  
       .button-set
         .edit-buttons(
           v-if="editTitleComputed"
@@ -41,14 +34,15 @@
         :key="`${item.name}_${i}`"
         :iterator="i"
         @removeSkill="removeSkill"
-        )
+        ) 
     .add-skill
       .new-skill
-        input.skill-name-input(
-          placeholder="Новый навык"
-          ref="newSkillName"
-          )
-        
+        .new-skill-wrapper.tooltip
+          input.skill-name-input(
+            placeholder="Новый навык"
+            ref="newSkillName"
+            )
+          .input-tooltip(:class="{'showed':showNewSkillError}") {{'Поле не должно быть пустым'}}
       .new-count
         input.skill-count-input(
             :value="100"
@@ -75,16 +69,18 @@ export default {
   data() {
     return{
       editTitle: false,
-      category:{}
+      category:{},
+      categoryTitleValue:'',
+      showNewSkillError:false,
     }
   },
   computed:{
     editTitleComputed(){
       return this.editTitle || this.category.category.length == 0
-    }
+    },
   },
   validators:{
-    'category.category'(value){
+    'categoryTitleValue'(value){
       return Validator.value(value).required('Поле не должно быть пустым');
     }
   },
@@ -93,42 +89,56 @@ export default {
 
     },
     editSkillGroupName(){
-      if(!this.category.category){
-        this.$axios.post('/categories', {title: this.$refs.skillGroupName.value})
+      this.$validate()
+        .then(success => {
+          if (success) {
+            if(!this.category.id){
+              this.$axios.post('/categories', {title: this.$refs.skillGroupName.value})
+              .then(Response => {
+                this.category = Response.data;
+              })
+              .catch(error => {
+                console.log(error.Response);
+              });
+            }
+            else{
+              this.$axios.post(`/categories/${this.category.id}`, {title: this.$refs.skillGroupName.value})
+              .then(Response => {
+                this.category.category = Response.data.category.category;
+              })
+              .catch( Response => {
+                console.log(Response);
+              });
+            }
+            this.editTitle = false;
+          }
+      }) 
+      
+    },
+    addSkill(){
+      if (this.$refs.newSkillName.value != ''){
+        this.$axios.post('/skills', {title: this.$refs.newSkillName.value,
+                                  percent: this.$refs.newSkillCount.value,
+                                  category: this.category.id
+                                  })
         .then(Response => {
-          this.category = Response.data;
+          this.skills.push(Response.data)
         })
         .catch(error => {
           console.log(error.Response);
         });
+        this.$refs.newSkillName.value = "";
+        this.$refs.newSkillCount.value = 100;
+        this.showNewSkillError = false;
       }
       else{
-        this.$axios.post(`/categories/${this.category.id}`, {title: this.$refs.skillGroupName.value})
-        .then(Response => {
-          this.category.category = Response.data.category.category;
-        })
-        .catch( Response => {
-          console.log(Response);
-        });
+        this.showNewSkillError = true;
       }
-      this.editTitle = false;
-    },
-    addSkill(){
-      this.$axios.post('/skills', {title: this.$refs.newSkillName.value,
-                                    percent: this.$refs.newSkillCount.value,
-                                    category: this.category.id
-                                    })
-      .then(Response => {
-        this.skills.push(Response.data)
-      })
-      .catch(error => {
-        console.log(error.Response);
-      });
-      this.$refs.newSkillName.value = "";
-      this.$refs.newSkillCount.value = 100;
+     
     },
     cancelEdit(){
       this.editTitle = false;
+      this.categoryTitleValue = this.category.category;
     },
     removeSkill(skill){
       this.$axios.delete(`/skills/${skill.id}`)
@@ -142,6 +152,7 @@ export default {
   },
   beforeMount(){
     this.category = {...this.defaultCategory}
+    this.categoryTitleValue = this.category.category
   }
 }
 </script>
@@ -195,7 +206,6 @@ export default {
 .spliter{
   opacity: 0.15;
 }
-
 .group-body{
   padding-bottom: 140px;
 }
@@ -223,13 +233,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  /* padding-top: 70px; */
 }
 
 .new-skill{
   display: flex;
   margin-right: 10px;
-  width:45%;
   justify-content: flex-end;
   height: 100%;
   border-bottom: 1px solid;
