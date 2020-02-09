@@ -215,7 +215,7 @@ export default {
         occ: '',
         text: '',
       }
-      //this.validation.reset();
+      this.validation.reset();
     },
     selectReview(review){
       this.currentReview = {...review};
