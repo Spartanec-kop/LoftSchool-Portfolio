@@ -34,8 +34,10 @@
         .number {{works.indexOf(activeItem) + 1}}    
       .description
           .description-tags
-            ul.tags-items
-              li.tag(
+            ul.tags-items(
+              v-if="activeItem"
+            )
+              li.tag(               
                 v-for="item in activeItem.techs.split(', ')"
               )
                 .tag-text {{item}}
@@ -64,15 +66,10 @@ export default {
       works:[]
     }
   },
-  computed:{
-    
-  },
-
   created() {
     window.addEventListener('resize', this.updateWidth);
     axios.get('/works/248')
     .then(Response => {
-      console.log(Response.data);
       this.works = Response.data;
       this.activeItem = Response.data[0];
     })
