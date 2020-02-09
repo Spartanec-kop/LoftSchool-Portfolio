@@ -1,6 +1,6 @@
 <template lang="pug">
 .admin-input.tooltip(
-    :class="{'.admin-input__error':isInvalid}") 
+    :class="{'admin-input__error':isInvalid}") 
   label.admin-input-label(:for="id") {{labelText}}   
   .admin-input-wrapper       
     input.admin-input-input(
@@ -41,7 +41,7 @@ export default {
   },
 }
 </script>
-<style lang="postcss" scoped>
+<style lang="postcss">
 
 .admin-input{
   border-bottom: 1px solid black;
@@ -53,6 +53,7 @@ export default {
       color: $links-color;
     }  
 }
+
 .admin-input-label{
   opacity: 0.5;
   font-size: 16px;

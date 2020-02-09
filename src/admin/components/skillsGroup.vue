@@ -8,6 +8,15 @@
           :readOnly="editTitleComputed ? false : true"
           ref="skillGroupName"
           )
+        //- admin-input.title-skill-group(
+        //-       :labelText="''"
+        //-       :isInvalid="false"
+        //-       :toolTipText="'toolTipText'"
+        //-       :id="'titleskill-group'"
+        //-       :type="'input'"
+        //-       :val="category.category"
+        //-       @change="titleChange"
+        //-     )
       .button-set
         .edit-buttons(
           v-if="editTitleComputed"
@@ -52,8 +61,12 @@
         plus
 </template>
 <script>
+import SimpleVueValidator from 'simple-vue-validator';
+const Validator = SimpleVueValidator.Validator;
+
 import skill from './skill'
 export default {
+  mixins: [SimpleVueValidator.mixin],
   components:{skill},
   name: 'skillsGroup',
   props:{
@@ -62,7 +75,7 @@ export default {
   data() {
     return{
       editTitle: false,
-      category:[]
+      category:{}
     }
   },
   computed:{
@@ -70,7 +83,15 @@ export default {
       return this.editTitle || this.category.category.length == 0
     }
   },
+  validators:{
+    'category.category'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    }
+  },
   methods:{
+    titleChange(){
+
+    },
     editSkillGroupName(){
       if(!this.category.category){
         this.$axios.post('/categories', {title: this.$refs.skillGroupName.value})
@@ -84,10 +105,10 @@ export default {
       else{
         this.$axios.post(`/categories/${this.category.id}`, {title: this.$refs.skillGroupName.value})
         .then(Response => {
-          this.category = Response.data.category;
+          this.category.category = Response.data.category.category;
         })
-        .catch(error => {
-          console.log(error.Response);
+        .catch( Response => {
+          console.log(Response);
         });
       }
       this.editTitle = false;
@@ -140,7 +161,7 @@ export default {
   
   width: 60%;  
 }
-  .input-edited{
+.input-edited{
     border-bottom: 1px solid;
 }
 

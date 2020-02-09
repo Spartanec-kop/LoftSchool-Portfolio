@@ -12,7 +12,7 @@
           .edit-works-title-text Редактирование работы
         hr  
         .edit-works-body
-          .import-image-wrapper 
+          .import-image-wrapper.tooltip
             .admin-preview(
               v-if="currentWork.photo"
             )
@@ -36,16 +36,17 @@
                   fill-button(
                     text="ЗАГРУЗИТЬ"
                   )
+            .input-tooltip(:class="{'showed':validation.hasError('currentWork.photo')}") {{validation.firstError('currentWork.photo')}}
           input#work-photo(
             type="file"
             ref="workImage"
             @change="changeImgFile"
-          )        
+          )                 
           .works-description
             admin-input.name-work(
               :labelText="'Название'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
+              :isInvalid="validation.hasError('currentWork.title')"
+              :toolTipText="validation.firstError('currentWork.title')"
               :id="'title-work'"
               :type="'input'"
               :val="currentWork.title"
@@ -54,8 +55,8 @@
 
             admin-input.link-work(
               :labelText="'Ссылка'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
+              :isInvalid="validation.hasError('currentWork.link')"
+              :toolTipText="validation.firstError('currentWork.link')"
               :id="'link-work'"
               :type="'input'"
               :val="currentWork.link"
@@ -64,8 +65,8 @@
 
             admin-input.desc-work(
               :labelText="'Описание'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
+              :isInvalid="validation.hasError('currentWork.description')"
+              :toolTipText="validation.firstError('currentWork.description')"
               :id="'desc-work'"
               :type="'textarea'"
               :val="currentWork.description"
@@ -74,8 +75,8 @@
 
             admin-input.tags-work(
               :labelText="'Добавление тэга'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
+              :isInvalid="validation.hasError('currentWork.techs')"
+              :toolTipText="validation.firstError('currentWork.techs')"
               :id="'tags-work'"
               :type="'input'"
               :val="currentWork.techs"
@@ -118,16 +119,36 @@
         )    
 </template>
 <script>
+import SimpleVueValidator from 'simple-vue-validator';
+const Validator = SimpleVueValidator.Validator;
 
 import tag from './tag'
 import work from './work'
 export default {
+  mixins: [SimpleVueValidator.mixin],
   components:{tag, work},
   name: 'myWorks',
   data(){
     return{
       currentWork: null,
       works:[],
+    }
+  },
+  validators:{
+    'currentWork.title'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    },
+    'currentWork.description'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    },
+    'currentWork.link'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    },
+    'currentWork.techs'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    },
+    'currentWork.photo'(value){
+      return Validator.value(value).required('Нужно загрузить фото');
     }
   },
   methods:{
@@ -156,6 +177,7 @@ export default {
     },
     nameChange(value){
       this.currentWork.title = value;
+      
     },
     linkChange(value){
       this.currentWork.link = value;
@@ -182,47 +204,52 @@ export default {
       this.currentWork = null;
     },
     saveEdit(){
-      if(!this.currentWork.id){
-        var formData = new FormData();
-        formData.append("title", this.currentWork.title);
-        formData.append("techs", this.currentWork.techs);
-        formData.append("photo", this.currentWork.photo);
-        formData.append("link", this.currentWork.link);
-        formData.append("description", this.currentWork.description);
-        this.$axios.post(`/works`, formData, {
-                                        headers: {
-                                          'Content-Type': 'multipart/form-data'
-                                        }
-          })
-        .then(Response => {
-          this.works.push(Response.data);
-        })
-        .catch(error => {
-          console.log(error.Response);
-        });
-        
-      }
-      else{
-        var formData = new FormData();
-        formData.append("title", this.currentWork.title);
-        formData.append("techs", this.currentWork.techs);
-        formData.append("photo", this.currentWork.photo);
-        formData.append("link", this.currentWork.link);
-        formData.append("description", this.currentWork.description);
-        this.$axios.post(`/works/${this.currentWork.id}`, formData, {
-                                        headers: {
-                                          'Content-Type': 'multipart/form-data'
-                                        }
-          })
-        .then(Response => {
-          let tmp = this.works.find(f => f.id == this.currentWork.id);
-          this.works[this.works.indexOf(tmp)] = Response.data.work;
-          this.currentWork = null;
-        })
-        .catch(error => {
-          console.log(error.Response);
-        });
-      }      
+      this.$validate()
+        .then(success => {
+          if (success) {
+            if(!this.currentWork.id){
+              var formData = new FormData();
+              formData.append("title", this.currentWork.title);
+              formData.append("techs", this.currentWork.techs);
+              formData.append("photo", this.currentWork.photo);
+              formData.append("link", this.currentWork.link);
+              formData.append("description", this.currentWork.description);
+              this.$axios.post(`/works`, formData, {
+                                              headers: {
+                                                'Content-Type': 'multipart/form-data'
+                                              }
+                })
+              .then(Response => {
+                this.works.push(Response.data);
+              })
+              .catch(error => {
+                console.log(error.Response);
+              });
+              
+            }
+            else{
+              var formData = new FormData();
+              formData.append("title", this.currentWork.title);
+              formData.append("techs", this.currentWork.techs);
+              formData.append("photo", this.currentWork.photo);
+              formData.append("link", this.currentWork.link);
+              formData.append("description", this.currentWork.description);
+              this.$axios.post(`/works/${this.currentWork.id}`, formData, {
+                                              headers: {
+                                                'Content-Type': 'multipart/form-data'
+                                              }
+                })
+              .then(Response => {
+                let tmp = this.works.find(f => f.id == this.currentWork.id);
+                this.works[this.works.indexOf(tmp)] = Response.data.work;
+                this.currentWork = null;
+              })
+              .catch(error => {
+                console.log(error.Response);
+              });
+            }
+          }
+        })      
     },
     addNewWork(){
       this.currentWork = {
@@ -234,6 +261,7 @@ export default {
           techs:''
 
         };
+      this.validation.reset();  
     }
   },
   beforeMount(){

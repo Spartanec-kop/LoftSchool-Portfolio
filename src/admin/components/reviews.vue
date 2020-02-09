@@ -12,7 +12,7 @@
           .edit-reviews-title-text Новый отзыв
         hr  
         .edit-reviews-body
-          .edit-reviews-avatar
+          .edit-reviews-avatar.tooltip
             .edit-reviews-image
               img.admin-edit-reviews-avatar-img#edit-avatar-preview(  
                   ref="reviewAvatar"               
@@ -26,13 +26,14 @@
             .edit-reviews-avatar-text(
               @click="uploadImage"
             ) {{currentReview && currentReview.photo ? 'Изменить фото' : 'Добавить фото'}}
+            .input-tooltip(:class="{'showed':validation.hasError('currentReview.photo')}") {{validation.firstError('currentReview.photo')}}
           .edit-reviews-comment  
             .edit-reviews-revier
               .edit-reviews-name
                 admin-input.reviews-name(
                   :labelText="'Имя автора'"
-                  :isInvalid="false"
-                  :toolTipText="'toolTipText'"
+                  :isInvalid="validation.hasError('currentReview.author')"
+                  :toolTipText="validation.firstError('currentReview.author')"
                   :id="'reviews-name'"
                   :type="'input'"
                   :val="currentReview.author"
@@ -41,8 +42,8 @@
               .edit-reviews-position
                 admin-input.reviews-position(
                   :labelText="'Титул автора'"
-                  :isInvalid="false"
-                  :toolTipText="'toolTipText'"
+                  :isInvalid="validation.hasError('currentReview.occ')"
+                  :toolTipText="validation.firstError('currentReview.occ')"
                   :id="'reviews-position'"
                   :type="'input'"
                   :val="currentReview.occ"
@@ -51,8 +52,8 @@
             .edit-reviews-message
               admin-input.reviews-message(
                 :labelText="'Отзыв'"
-                :isInvalid="false"
-                :toolTipText="'toolTipText'"
+                :isInvalid="validation.hasError('currentReview.text')"
+                :toolTipText="validation.firstError('currentReview.text')"
                 :id="'reviews-message'"
                 :type="'textarea'"
                 :val="currentReview.text"
@@ -88,14 +89,31 @@
 </template>
 <script>
 import review from './review'
+import SimpleVueValidator from 'simple-vue-validator';
+const Validator = SimpleVueValidator.Validator;
 
 export default {
+  mixins: [SimpleVueValidator.mixin],
   components:{review},
   name: 'reviews',
   data(){
     return{
       currentReview: null,
       reviews:[]
+    }
+  },
+  validators:{
+    'currentReview.author'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    },
+    'currentReview.occ'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    },
+    'currentReview.text'(value){
+      return Validator.value(value).required('Поле не должно быть пустым');
+    },
+    'currentReview.photo'(value){
+      return Validator.value(value).required('Необходимо загрузить фото');
     }
   },
   methods:{
@@ -135,45 +153,50 @@ export default {
       }
     },
     saveEdit(){
-      if(!this.currentReview.id){
-        var formData = new FormData();
-        formData.append("author", this.currentReview.author);
-        formData.append("occ", this.currentReview.occ);
-        formData.append("photo", this.currentReview.photo);
-        formData.append("text", this.currentReview.text);
-        this.$axios.post(`/reviews`, formData, {
-                                        headers: {
-                                          'Content-Type': 'multipart/form-data'
-                                        }
-          })
-        .then(Response => {
-          this.reviews.push(Response.data);
-          this.currentReview = null;
-        })
-        .catch(error => {
-          console.log(error.Response);
-        });
-      }
-      else{
-        var formData = new FormData();
-        formData.append("author", this.currentReview.author);
-        formData.append("occ", this.currentReview.occ);
-        formData.append("photo", this.currentReview.photo);
-        formData.append("text", this.currentReview.text);
-        this.$axios.post(`/reviews/${this.currentReview.id}`, formData, {
-                                        headers: {
-                                          'Content-Type': 'multipart/form-data'
-                                        }
-          })
-        .then(Response=>{
-          let tmp = this.reviews.find(f => f.id == this.currentReview.id); 
-          this.reviews[this.reviews.indexOf(tmp)] = Response.data.review;
-          this.currentReview = null;
-          })
-        .catch(error => {
-          console.log(error.Response);
-        });
-      }
+      this.$validate()
+        .then(success => {
+          if (success) {
+            if(!this.currentReview.id){
+              var formData = new FormData();
+              formData.append("author", this.currentReview.author);
+              formData.append("occ", this.currentReview.occ);
+              formData.append("photo", this.currentReview.photo);
+              formData.append("text", this.currentReview.text);
+              this.$axios.post(`/reviews`, formData, {
+                                              headers: {
+                                                'Content-Type': 'multipart/form-data'
+                                              }
+                })
+              .then(Response => {
+                this.reviews.push(Response.data);
+                this.currentReview = null;
+              })
+              .catch(error => {
+                console.log(error.Response);
+              });
+            }
+            else{
+              var formData = new FormData();
+              formData.append("author", this.currentReview.author);
+              formData.append("occ", this.currentReview.occ);
+              formData.append("photo", this.currentReview.photo);
+              formData.append("text", this.currentReview.text);
+              this.$axios.post(`/reviews/${this.currentReview.id}`, formData, {
+                                              headers: {
+                                                'Content-Type': 'multipart/form-data'
+                                              }
+                })
+              .then(Response=>{
+                let tmp = this.reviews.find(f => f.id == this.currentReview.id); 
+                this.reviews[this.reviews.indexOf(tmp)] = Response.data.review;
+                this.currentReview = null;
+                })
+              .catch(error => {
+                console.log(error.Response);
+              });
+            }
+          } 
+        }) 
     },
     authorChange(value){
       this.currentReview.author = value;
@@ -192,6 +215,7 @@ export default {
         occ: '',
         text: '',
       }
+      //this.validation.reset();
     },
     selectReview(review){
       this.currentReview = {...review};
