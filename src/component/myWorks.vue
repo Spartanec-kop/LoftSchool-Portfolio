@@ -66,9 +66,9 @@ export default {
       works:[]
     }
   },
-  created() {
+  async created() {
     window.addEventListener('resize', this.updateWidth);
-    axios.get('/works/248')
+    await axios.get('/works/248')
     .then(Response => {
       this.works = Response.data;
       this.activeItem = Response.data[0];

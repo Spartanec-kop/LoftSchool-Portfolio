@@ -32,6 +32,7 @@
 <script>
 import axios from './../requests'
 import comment from './comment'
+
 export default {
   components:{comment},
   name: 'comments',
@@ -44,8 +45,8 @@ export default {
   ready: function () {
     window.addEventListener('resize', this.handleResize)
   },
-  created(){
-    axios.get('/reviews/248')
+  async created(){
+    await axios.get('/reviews/248')
     .then(Response => {
       this.reviews = Response.data;
     })
