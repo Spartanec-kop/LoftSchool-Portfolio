@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import App from './App.vue'
 import VueRouter from 'vue-router'
-import axios from 'axios'
+import axios from './requests'
 import "core-js/stable";
 import "regenerator-runtime/runtime";
+import {store} from './store'
 
 import login from './components/login'
 import maincontent from "./components/maincontent"
@@ -12,33 +13,9 @@ import plus from './components/plus.vue'
 import fillButton from './components/fill-button.vue'
 import adminInput from './components/adminInput'
 
-const baseUrl = Vue.prototype.$baseUrl = "https://webdev-api.loftschool.com/";
-Vue.prototype.$token = localStorage.getItem('token') || '';
-
-axios.defaults.baseURL = baseUrl;
-axios.defaults.headers["Authorization"] = `Bearer ${Vue.prototype.$token}`;
-
-axios.interceptors.response.use(function (response) {
-
-  return response;
-}, function (error) {
-  const originRequest = error.config;
-  if ( error.response.status === 401 && error.response.data != 'Передан не валидный токен' ){
-    return axios.post('/refreshToken')
-      .then(response => {
-        const token  = response.data.token;
-
-        localStorage.setItem('token', token);
-        axios.defaults.headers["Authorization"] = `Bearer ${token}`;
-        originRequest.headers["Authorization"] = `Bearer ${token}`;
-
-        return axios(originRequest)
-      })
-  }
-  return Promise.reject(error);
-});
 
 Vue.prototype.$axios = axios;
+Vue.prototype.$baseUrl = "https://webdev-api.loftschool.com/";
 
 const router = new VueRouter({
   routes:[
@@ -101,4 +78,5 @@ new Vue({
   el: "#app-root",
   render: h => h(App),
   router,
+  store,
 });

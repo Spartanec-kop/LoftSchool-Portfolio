@@ -415,6 +415,7 @@ hr{
   align-items: center;
   flex-direction: column;
   cursor: pointer;
+  padding: 40px 0;
 }
 .plus{
     display: flex;
