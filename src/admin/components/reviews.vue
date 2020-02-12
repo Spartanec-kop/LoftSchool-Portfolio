@@ -88,42 +88,54 @@
         )        
 </template>
 <script>
-import review from './review'
-import SimpleVueValidator from 'simple-vue-validator';
+import review from "./review";
+import SimpleVueValidator from "simple-vue-validator";
 const Validator = SimpleVueValidator.Validator;
+import { mapActions, mapState } from "vuex";
 
 export default {
   mixins: [SimpleVueValidator.mixin],
-  components:{review},
-  name: 'reviews',
-  data(){
-    return{
-      currentReview: null,
-      reviews:[]
+  components: { review },
+  name: "reviews",
+  data() {
+    return {
+      currentReview: null
+      //reviews:[]
+    };
+  },
+  computed: {
+    ...mapState("reviews", {
+      reviews: state => state.reviews
+    })
+  },
+  validators: {
+    "currentReview.author"(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    "currentReview.occ"(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    "currentReview.text"(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    "currentReview.photo"(value) {
+      return Validator.value(value).required("Необходимо загрузить фото");
     }
   },
-  validators:{
-    'currentReview.author'(value){
-      return Validator.value(value).required('Поле не должно быть пустым');
-    },
-    'currentReview.occ'(value){
-      return Validator.value(value).required('Поле не должно быть пустым');
-    },
-    'currentReview.text'(value){
-      return Validator.value(value).required('Поле не должно быть пустым');
-    },
-    'currentReview.photo'(value){
-      return Validator.value(value).required('Необходимо загрузить фото');
-    }
-  },
-  methods:{
-    cancelEdit(){
+  methods: {
+    ...mapActions("reviews", [
+      "fetchReviews",
+      "removeReview",
+      "saveReview",
+      "addReview"
+    ]),
+    cancelEdit() {
       this.currentReview = null;
     },
-    uploadImage(){
+    uploadImage() {
       this.$refs.reviewImage.click();
     },
-    changeImgFile(e){
+    changeImgFile(e) {
       this.currentReview.photo = e.target.files[0];
       var reader = new FileReader();
 
@@ -132,96 +144,77 @@ export default {
         imgtag.src = event.target.result;
       };
 
-      reader.readAsDataURL(this.currentReview.photo)
+      reader.readAsDataURL(this.currentReview.photo);
     },
-    getAvatar(){
-      if (typeof(this.currentReview.photo) == 'Object'){
+    getAvatar() {
+      if (typeof this.currentReview.photo == "Object") {
         var reader = new FileReader();
 
         reader.onload = function(event) {
-        var imgtag = document.getElementById("edit-avatar-preview");
-        imgtag.src = event.target.result;
-      };
+          var imgtag = document.getElementById("edit-avatar-preview");
+          imgtag.src = event.target.result;
+        };
 
-      reader.readAsDataURL(this.currentReview.photo)
+        reader.readAsDataURL(this.currentReview.photo);
       }
-      if (this.currentReview && this.currentReview.id){
-        return this.$baseUrl + this.currentReview.photo
-      }
-      else{
-        return this.$importImg(`content/emptiAvatar.jpg`)
+      if (this.currentReview && this.currentReview.id) {
+        return this.$baseUrl + this.currentReview.photo;
+      } else {
+        return this.$importImg(`content/emptiAvatar.jpg`);
       }
     },
-    saveEdit(){
-      this.$validate()
-        .then(success => {
-          if (success) {
-            if(!this.currentReview.id){
-              var formData = new FormData();
-              formData.append("author", this.currentReview.author);
-              formData.append("occ", this.currentReview.occ);
-              formData.append("photo", this.currentReview.photo);
-              formData.append("text", this.currentReview.text);
-              this.$axios.post(`/reviews`, formData, {
-                                              headers: {
-                                                'Content-Type': 'multipart/form-data'
-                                              }
-                })
-              .then(Response => {
-                this.reviews.push(Response.data);
-                this.currentReview = null;
-              })
-              .catch(error => {
-                console.log(error.Response);
-              });
-            }
-            else{
-              var formData = new FormData();
-              formData.append("author", this.currentReview.author);
-              formData.append("occ", this.currentReview.occ);
-              formData.append("photo", this.currentReview.photo);
-              formData.append("text", this.currentReview.text);
-              this.$axios.post(`/reviews/${this.currentReview.id}`, formData, {
-                                              headers: {
-                                                'Content-Type': 'multipart/form-data'
-                                              }
-                })
-              .then(Response=>{
-                let tmp = this.reviews.find(f => f.id == this.currentReview.id); 
-                this.reviews[this.reviews.indexOf(tmp)] = Response.data.review;
-                this.currentReview = null;
-                })
-              .catch(error => {
-                console.log(error.Response);
-              });
-            }
-          } 
-        }) 
+    saveEdit() {
+      this.$validate().then(success => {
+        if (success) {
+          if (!this.currentReview.id) {
+            var formData = new FormData();
+            formData.append("author", this.currentReview.author);
+            formData.append("occ", this.currentReview.occ);
+            formData.append("photo", this.currentReview.photo);
+            formData.append("text", this.currentReview.text);
+
+            this.addReview(formData);
+          } else {
+            var formData = new FormData();
+            formData.append("author", this.currentReview.author);
+            formData.append("occ", this.currentReview.occ);
+            formData.append("photo", this.currentReview.photo);
+            formData.append("text", this.currentReview.text);
+
+            this.saveReview({
+              reviewId: this.currentReview.id,
+              formData: formData
+            });
+          }
+          this.currentReview = null;
+        }
+      });
     },
-    authorChange(value){
+    authorChange(value) {
       this.currentReview.author = value;
     },
-    occChange(value){
+    occChange(value) {
       this.currentReview.occ = value;
     },
-    messageChange(value){
+    messageChange(value) {
       this.currentReview.text = value;
     },
-    addNewreviews(){
+    addNewreviews() {
       this.currentReview = {
-        id:null,
+        id: null,
         photo: null,
-        author: '',
-        occ: '',
-        text: '',
-      }
+        author: "",
+        occ: "",
+        text: ""
+      };
       this.validation.reset();
     },
-    selectReview(review){
-      this.currentReview = {...review};
+    selectReview(review) {
+      this.currentReview = { ...review };
     },
-    removeReview(review){
-        this.$axios.delete(`/reviews/${review.id}`)
+    removeReview(review) {
+      this.$axios
+        .delete(`/reviews/${review.id}`)
         .then(Response => {
           this.reviews.splice(this.reviews.indexOf(review), 1);
         })
@@ -229,67 +222,68 @@ export default {
           console.log(error.Response);
         });
     },
-    getContent(){
-      this.$axios.get(`/reviews/${this.$user.id}`)
-      .then(Response => {
-        this.reviews = Response.data;
-    })
-    .catch(error => {
-      console.log(error.Response);
-    });
+    getContent() {
+      this.$axios
+        .get(`/reviews/${this.$user.id}`)
+        .then(Response => {
+          this.reviews = Response.data;
+        })
+        .catch(error => {
+          console.log(error.Response);
+        });
     }
   },
-  beforeMount(){
-    this.getContent();
+  created() {
+    this.fetchReviews(this.$user.id);
   }
-}
+};
 </script>
 <style lang="postcss" scoped>
-#reviews-photo{
+#reviews-photo {
   display: none;
 }
-.reviews-wrapper{
+.reviews-wrapper {
   padding-bottom: 40px;
 }
-.title{
+.title {
   display: flex;
   align-items: center;
   padding: 20px 0;
 }
-.title-text{
+.title-text {
   font-size: 21px;
   font-weight: bold;
 }
-.edit-reviews{
+.edit-reviews {
   padding: 30px;
   background-color: white;
   box-shadow: 4.1px 2.9px 20px 0 rgba(0, 0, 0, 0.07);
 }
-.edit-reviews-title{
+.edit-reviews-title {
   padding-bottom: 25px;
   padding-left: 10px;
   font-size: 18px;
   font-weight: bold;
   line-height: 1.89;
 }
-hr{
+hr {
   opacity: 0.15;
 }
-.edit-reviews-body{
+.edit-reviews-body {
   display: flex;
   padding-top: 50px;
 }
-.admin-edit-reviews-avatar-img{
+.admin-edit-reviews-avatar-img {
   height: 200px;
   width: 200px;
   border-radius: 50%;
   object-fit: cover;
 }
-.edit-reviews-avatar{
-  width:200px;
-  height:200px;
+.edit-reviews-avatar {
+  width: 200px;
+  height: 200px;
 }
-.edit-reviews-avatar-text{
+.edit-reviews-avatar-text {
   padding-top: 30px;
   font-size: 16px;
   font-weight: 600;
@@ -298,21 +292,21 @@ hr{
   text-align: center;
   cursor: pointer;
 }
-.edit-reviews-revier{
+.edit-reviews-revier {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap:30px;
+  column-gap: 30px;
 }
-.edit-reviews-comment{
+.edit-reviews-comment {
   padding-left: 30px;
-  width:100%;
+  width: 100%;
   max-width: 610px;
 }
-.reviews-message{
-  height:180px;
+.reviews-message {
+  height: 180px;
 }
 
-.reviews-list{
+.reviews-list {
   display: grid;
   padding-top: 30px;
   grid-template-columns: 1fr 1fr 1fr;
@@ -320,13 +314,12 @@ hr{
   row-gap: 30px;
 }
 
-.reviews-list-item{
+.reviews-list-item {
   box-shadow: 4.1px 2.9px 20px 0 rgba(0, 0, 0, 0.07);
   background-color: white;
 }
 
-
-.add-new-review{
+.add-new-review {
   background-image: linear-gradient(to right, #006aed, #3f35cb);
   display: flex;
   justify-content: center;
@@ -335,91 +328,88 @@ hr{
   cursor: pointer;
   padding: 40px 0;
 }
-.plus{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 95px;
-    height: 95px;
-    font-weight: 600;
-    line-height: 1;
-    color: #ffffff;
-    background: transparent;
-    border-radius: 50%;
-    border: 2px solid white;  
-    cursor: pointer;  
-    font-size: 72px;
-    font-weight: 300;
-  }
+.plus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95px;
+  height: 95px;
+  font-weight: 600;
+  line-height: 1;
+  color: #ffffff;
+  background: transparent;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  font-size: 72px;
+  font-weight: 300;
+}
 
-.add-new-review-text{
+.add-new-review-text {
   font-size: 18px;
   font-weight: bold;
   line-height: 1.67;
   text-align: center;
   color: #ffffff;
   padding-top: 30px;
-
 }
-.add-new-review-text span{
-   display: block;
+.add-new-review-text span {
+  display: block;
 }
 
-.edit-reviews-buttons{
+.edit-reviews-buttons {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
-.edit-reviews-cancel{
+.edit-reviews-cancel {
   font-weight: 600;
   line-height: 2.13;
   color: #383bcf;
   padding-right: 60px;
   cursor: pointer;
 }
-.edit-reviews-save{
+.edit-reviews-save {
   height: 60px;
-  width: 180px
+  width: 180px;
 }
 
-
 @media screen and (max-width: 850px) {
-
-  .reviews-list{
+  .reviews-list {
     grid-template-columns: 1fr 1fr;
   }
-}  
+}
 
 @media screen and (max-width: 500px) {
-  .reviews-list{
+  .reviews-list {
     display: grid;
     grid-template-columns: 1fr;
   }
-  .add-new-review{
+  .add-new-review {
     height: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
   }
-  .add-new-review-text{
+  .add-new-review-text {
     padding-top: 0px;
     padding-left: 20px;
   }
-  .add-new-review-text span{
+  .add-new-review-text span {
     display: inline;
-    &:last-child{
-      &::before{
-        content: ' ';
+    &:last-child {
+      &::before {
+        content: " ";
       }
     }
   }
-  .plus{
+  .plus {
     width: 50px;
     height: 50px;
     font-size: 24px;
   }
-  .container{
+  .container {
     width: 100%;
   }
 }

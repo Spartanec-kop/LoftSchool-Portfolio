@@ -27,7 +27,7 @@ export default {
   name: 'maincontent',
   data(){
     return{
-      activeContent:'about',
+      activeContent:'reviews',
       authorized:false
     }
   },
