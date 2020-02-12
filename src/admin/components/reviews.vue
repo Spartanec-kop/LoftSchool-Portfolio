@@ -100,7 +100,6 @@ export default {
   data() {
     return {
       currentReview: null
-      //reviews:[]
     };
   },
   computed: {
@@ -211,26 +210,6 @@ export default {
     },
     selectReview(review) {
       this.currentReview = { ...review };
-    },
-    removeReview(review) {
-      this.$axios
-        .delete(`/reviews/${review.id}`)
-        .then(Response => {
-          this.reviews.splice(this.reviews.indexOf(review), 1);
-        })
-        .catch(error => {
-          console.log(error.Response);
-        });
-    },
-    getContent() {
-      this.$axios
-        .get(`/reviews/${this.$user.id}`)
-        .then(Response => {
-          this.reviews = Response.data;
-        })
-        .catch(error => {
-          console.log(error.Response);
-        });
     }
   },
   created() {
