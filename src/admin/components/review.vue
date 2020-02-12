@@ -27,89 +27,88 @@
 </template>
 <script>
 export default {
-  name: 'review',
-  props:{
-    review:Object,
-    selected:Boolean
+  name: "review",
+  props: {
+    review: Object,
+    selected: Boolean
   }
-}
+};
 </script>
 <style lang="postcss" scoped>
-.admin-review{
+.admin-review {
   padding: 20px;
-  height:100%;
+  height: 100%;
 }
-.admin-review-title{
-  display:flex;
+.admin-review-title {
+  display: flex;
 }
-.admin-review-avatar-img{
+.admin-review-avatar-img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  Object-fit:cover;
+  object-fit: cover;
 }
-.admin-review-person{
+.admin-review-person {
   padding-left: 20px;
 }
-.admin-review-name{
+.admin-review-name {
   font-size: 18px;
   font-weight: bold;
 }
-.admin-review-position{
+.admin-review-position {
   opacity: 0.5;
   font-size: 16px;
   font-weight: 600;
 }
-hr{
+hr {
   opacity: 0.15;
 }
-.admin-review-body{
-  padding:10px;
-  height:80%;
+.admin-review-body {
+  padding: 10px;
+  height: 80%;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   justify-content: space-between;
 }
-.admin-review-message{
+.admin-review-message {
   opacity: 0.7;
   font-size: 16px;
   font-weight: 600;
-  line-height: 1.88
+  line-height: 1.88;
 }
-.admin-review-buttons{
+.admin-review-buttons {
   display: flex;
   justify-content: space-between;
   padding-top: 40px;
   padding-bottom: 20px;
 }
 .admin-review-buttons-edit,
-.admin-review-buttons-remove{
+.admin-review-buttons-remove {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
-.admin-review-buttons-edit-icon svg{
-  fill:#3f35cb;
+.admin-review-buttons-edit-icon svg {
+  fill: #3f35cb;
   width: 17px;
   height: 17px;
   margin-top: 8px;
-  
 }
 .admin-review-buttons-edit-text,
-.admin-review-buttons-remove-text{
+.admin-review-buttons-remove-text {
   opacity: 0.5;
   font-size: 16px;
   font-weight: 600;
   padding-right: 10px;
 }
-.admin-review-buttons-remove-icon{
+.admin-review-buttons-remove-icon {
   font-size: 30px;
   font-weight: 600;
   line-height: 0.8;
   color: rgb(204, 3, 3);
 }
 
-.selected{
+.selected {
   opacity: 0.3;
   cursor: default;
 }

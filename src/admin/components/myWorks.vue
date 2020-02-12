@@ -159,12 +159,12 @@ export default {
   methods: {
     ...mapActions("works", ["fetchWorks", "removeWork", "saveWork", "addWork"]),
     removeTag(val) {
-      let tags = this.currentWork.techs.split(',');
+      let tags = this.currentWork.techs.split(",");
       tags.forEach((element, i) => {
         if (element == val) {
           tags.splice(i, 1);
         }
-        this.currentWork.techs = tags.join(',');
+        this.currentWork.techs = tags.join(",");
       });
     },
     uploadImage() {

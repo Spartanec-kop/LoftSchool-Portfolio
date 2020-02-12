@@ -4,27 +4,34 @@
     img.background-img(
       :src="this.$importImg('content/baloonAdmin.jpg')"
       )     
-  router-view
-
+  header-admin(
+    v-if="$router.currentRoute.name != 'login'"
+  )
+  main-menu(
+    v-if="$router.currentRoute.name != 'login'"
+    :active="$router.currentRoute.name"
+  )
+  .content
+    router-view
 </template>
 <script>
-
+import headerAdmin from "./components/headerAdmin";
+import mainMenu from "./components/mainMenu";
 
 export default {
-  name: 'App',
-  data(){
-    return{
-      
-    }
+  components: { "header-admin": headerAdmin, "main-menu": mainMenu },
+  name: "App",
+  data() {
+    return {};
   }
-}
+};
 </script>
 <style src="../styles/main.pcss" lang="postcss"></style>
 <style lang="postcss">
-.admin-wrapper{
+.admin-wrapper {
   position: relative;
 }
-.content-background{
+.content-background {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -32,15 +39,14 @@ export default {
   z-index: -2;
 }
 
-.background-img{
+.background-img {
   object-fit: cover;
   width: 100%;
   opacity: 0.1;
 }
-.background-img{
+.background-img {
   object-fit: cover;
   width: 100%;
   opacity: 0.1;
 }
-
 </style>
