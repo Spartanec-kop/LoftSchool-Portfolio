@@ -4,7 +4,7 @@
       img.admin-work-image-img(:src="work.photo ? this.$baseUrl + work.photo : ''")
       .admin-work-tags
         tag.edit-tag(
-          v-for="tag in work.techs.split(', ')"
+          v-for="tag in work.techs.split(',')"
           :tag="tag"
           :key="work.id + '_' + tag"
         )

@@ -84,7 +84,7 @@
             )
             .admin-tags
               tag.edit-tag(
-                v-for="tag in currentWork.techs.split(', ')"
+                v-for="tag in currentWork.techs.split(',')"
                 :tag="tag"
                 :edit="true"
                 :key="currentWork.id + '_' + tag"
@@ -124,15 +124,20 @@ const Validator = SimpleVueValidator.Validator;
 
 import tag from "./tag";
 import work from "./work";
+import { mapActions, mapState } from "vuex";
 export default {
   mixins: [SimpleVueValidator.mixin],
   components: { tag, work },
   name: "myWorks",
   data() {
     return {
-      currentWork: null,
-      works: []
+      currentWork: null
     };
+  },
+  computed: {
+    ...mapState("works", {
+      works: state => state.works
+    })
   },
   validators: {
     "currentWork.title"(value) {
@@ -152,13 +157,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions("works", ["fetchWorks", "removeWork", "saveWork", "addWork"]),
     removeTag(val) {
-      let tags = this.currentWork.techs.split(", ");
+      let tags = this.currentWork.techs.split(',');
       tags.forEach((element, i) => {
         if (element == val) {
           tags.splice(i, 1);
         }
-        this.currentWork.techs = tags.join(", ");
+        this.currentWork.techs = tags.join(',');
       });
     },
     uploadImage() {
@@ -190,16 +196,6 @@ export default {
     selectWork(work) {
       this.currentWork = { ...work };
     },
-    removeWork(work) {
-      this.$axios
-        .delete(`/works/${work.id}`)
-        .then(Response => {
-          this.works.splice(this.works.indexOf(work), 1);
-        })
-        .catch(error => {
-          console.log(error.Response);
-        });
-    },
     cancelEdit() {
       this.currentWork = null;
     },
@@ -213,18 +209,8 @@ export default {
             formData.append("photo", this.currentWork.photo);
             formData.append("link", this.currentWork.link);
             formData.append("description", this.currentWork.description);
-            this.$axios
-              .post(`/works`, formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data"
-                }
-              })
-              .then(Response => {
-                this.works.push(Response.data);
-              })
-              .catch(error => {
-                console.log(error.Response);
-              });
+
+            this.addWork(formData);
           } else {
             var formData = new FormData();
             formData.append("title", this.currentWork.title);
@@ -232,21 +218,10 @@ export default {
             formData.append("photo", this.currentWork.photo);
             formData.append("link", this.currentWork.link);
             formData.append("description", this.currentWork.description);
-            this.$axios
-              .post(`/works/${this.currentWork.id}`, formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data"
-                }
-              })
-              .then(Response => {
-                let tmp = this.works.find(f => f.id == this.currentWork.id);
-                this.works[this.works.indexOf(tmp)] = Response.data.work;
-                this.currentWork = null;
-              })
-              .catch(error => {
-                console.log(error.Response);
-              });
+
+            this.saveWork({ workId: this.currentWork.id, formData: formData });
           }
+          this.currentWork = null;
         }
       });
     },
@@ -262,15 +237,8 @@ export default {
       this.validation.reset();
     }
   },
-  beforeMount() {
-    this.$axios
-      .get(`/works/${this.$user.id}`)
-      .then(Response => {
-        this.works = Response.data;
-      })
-      .catch(error => {
-        console.log(error.Response);
-      });
+  created() {
+    this.fetchWorks(this.$user.id);
   }
 };
 </script>

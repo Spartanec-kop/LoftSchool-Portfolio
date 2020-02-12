@@ -1,5 +1,7 @@
 <template lang="pug">
-  .admin-tag
+  .admin-tag(
+    v-if="tag != ''"
+  )
     .admin-tag-text {{tag}}
     .admin-tag-exit(
       v-if="edit"
@@ -8,19 +10,19 @@
 </template>
 <script>
 export default {
-  name: 'tag',
-  props:['tag', 'edit']
-}
+  name: "tag",
+  props: ["tag", "edit"]
+};
 </script>
 <style lang="postcss" scoped>
-.admin-tag{
+.admin-tag {
   display: flex;
   width: max-content;
   padding: 3px 10px;
   background-color: #e6e6e6;
   border-radius: 25px;
 }
-.admin-tag-exit{
+.admin-tag-exit {
   padding-left: 5px;
   opacity: 0.7;
   font-size: 20px;
@@ -28,8 +30,7 @@ export default {
   font-weight: 600;
   cursor: pointer;
 }
-.admin-tag-text{
-  /* padding-left: 5px; */
+.admin-tag-text {
   opacity: 0.7;
   font-size: 13px;
   font-weight: 600;
