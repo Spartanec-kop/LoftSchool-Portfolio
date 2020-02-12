@@ -274,12 +274,12 @@ hr {
   padding-top: 50px;
 }
 .admin-edit-reviews-avatar-img {
-  height: 200px;
-  width: 200px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
-.edit-reviews-avatar {
+.edit-reviews-image {
   width: 200px;
   height: 200px;
 }
