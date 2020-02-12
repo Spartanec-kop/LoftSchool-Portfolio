@@ -38,7 +38,7 @@
               v-if="activeItem"
             )
               li.tag(               
-                v-for="item in activeItem.techs.split(', ')"
+                v-for="item in activeItem.techs.split(',')"
               )
                 .tag-text {{item}}
           .description-title 
