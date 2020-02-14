@@ -24,9 +24,13 @@ axios.interceptors.response.use(
         originRequest.headers["Authorization"] = `Bearer ${token}`;
 
         return axios(originRequest);
+      })
+      .catch(e =>{
+        console.log(e);
+        return Promise.reject(error);
       });
     }
-    return Promise.reject(error);
+    //return Promise.reject(error);
   }
 );
 

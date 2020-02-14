@@ -4,7 +4,7 @@ import App from "./App.vue";
 import axios from "./requests";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import { store } from "./store";
+import store from "./store/index";
 import VueRouter from "vue-router";
 import router from "./router";
 import picturePlugin from "./utils/ImgSvg.plugin";

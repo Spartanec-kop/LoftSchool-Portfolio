@@ -4,24 +4,7 @@ import login from "./components/login";
 import about from "./components/about";
 import myWorks from "./components/myWorks";
 import reviews from "./components/reviews";
-
-async function isAuthentificated() {
-  let result = false;
-  if (localStorage.getItem("token")) {
-    await axios
-      .get("/user")
-      .then(response => {
-        //Vue.prototype.$user = response.data.user;
-        result = true;
-      })
-      .catch(error => {
-        result = false;
-      });
-  } else {
-    result = false;
-  }
-  return result;
-}
+import store from "./store/index"
 
 const router = new VueRouter({
   routes: [
@@ -48,9 +31,25 @@ const router = new VueRouter({
   ]
 });
 
+async function isAuthentificated() {
+  let result = false;
+  if (localStorage.getItem("token")) {
+    await store.dispatch('setUser');
+    if (store.getters.user){
+      result = true
+    }
+    else{
+      result = false
+    }
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 router.beforeEach((to, from, next) => {
   if (to.path != "/login") {
-    !isAuthentificated().then(result => {
+    isAuthentificated().then(result => {
       if (!result) {
         next("/login");
       } else {
@@ -58,12 +57,15 @@ router.beforeEach((to, from, next) => {
       }
     });
   } else {
-    !isAuthentificated().then(result => {
+    isAuthentificated().then(result => {
       if (result) {
         next("/");
       } else {
         next();
       }
+    })
+    .catch(e =>{
+      console.log(e);
     });
   }
 });
