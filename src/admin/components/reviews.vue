@@ -213,7 +213,7 @@ export default {
     }
   },
   created() {
-    this.fetchReviews(this.$user.id);
+    this.fetchReviews();
   }
 };
 </script>

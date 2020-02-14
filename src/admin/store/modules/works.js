@@ -6,9 +6,9 @@ export default {
     works: []
   },
   actions: {
-    fetchWorks({ commit }, userId) {
+    fetchWorks({ commit, rootState }) {
       axios
-        .get(`/works/${userId}`)
+        .get(`/works/${rootState.login.user.id}`)
         .then(Response => {
           commit("FETCH_WORKS", Response.data);
         })

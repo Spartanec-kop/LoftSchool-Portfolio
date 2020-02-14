@@ -6,9 +6,9 @@ export default {
     reviews: []
   },
   actions: {
-    fetchReviews({ commit }, userId) {
+    fetchReviews({ commit, rootState }) {
       axios
-        .get(`/reviews/${userId}`)
+        .get(`/reviews/${rootState.login.user.id}`)
         .then(Response => {
           commit("FETCH_REVIEWS", Response.data);
         })

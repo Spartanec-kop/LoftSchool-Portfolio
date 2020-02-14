@@ -34,7 +34,7 @@ export default {
     ...mapActions("about", ["fetchCategories", "addClearCategory"])
   },
   created() {
-    this.fetchCategories(this.$user.id);
+    this.fetchCategories();
   }
 };
 </script>

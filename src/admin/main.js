@@ -21,7 +21,6 @@ Vue.use(VueRouter);
 Vue.use(picturePlugin);
 
 Vue.prototype.$axios = axios;
-Vue.prototype.$user = { id: 248 };
 
 new Vue({
   el: "#app-root",

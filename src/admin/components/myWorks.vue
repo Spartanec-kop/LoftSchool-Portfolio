@@ -238,7 +238,7 @@ export default {
     }
   },
   created() {
-    this.fetchWorks(this.$user.id);
+    this.fetchWorks();
   }
 };
 </script>

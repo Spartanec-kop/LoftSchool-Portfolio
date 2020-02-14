@@ -6,9 +6,9 @@ export default {
     categories: []
   },
   actions: {
-    fetchCategories({ commit }, userId) {
+    fetchCategories({ commit, rootState }) {
       axios
-        .get("/categories/" + userId)
+        .get("/categories/" + rootState.login.user.id)
         .then(Response => {
           commit("SET_CATEGORIES", Response.data);
         })
