@@ -63,8 +63,8 @@ export default {
   methods: {
     disableButton() {
       return (
-        this.validation.hasError("password") ||
-        this.validation.hasError("login")
+        (this.validation.hasError("password") ||
+        this.validation.hasError("login")) || this.validation.passedRecords.length < 2
       );
     },
     changeLogin(val) {
