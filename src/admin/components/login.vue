@@ -30,7 +30,7 @@ div
             :toolTipText="validation.firstError('password')"
             @change="changePassword"
           )
-          button.button-wrapper(
+          button.button-wrapper#sendLoginForm(
             :class="disableButton() ? 'buttonDisabled' : '' "
             :disabled="disableButton()"
           )
