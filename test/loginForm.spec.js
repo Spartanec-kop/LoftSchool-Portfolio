@@ -55,15 +55,15 @@ test("Форма имеет все необходимые поля", () => {
     });
 });
 
-test("Кнопка “Отправить” заблокирована до тех пор, пока не введены все необходимые данные", () =>{
+test("Кнопка “Отправить” заблокирована до тех пор, пока не введены все необходимые данные", () => {
   return client
-  .isEnabled("#sendLoginForm")
-  .then(browsers => {
-    for (const browserName in browsers) {
-      expect(browsers[browserName]).toBe(false);
-    }
-  })
-  .screenshot()
+    .isEnabled("#sendLoginForm")
+    .then(browsers => {
+      for (const browserName in browsers) {
+        expect(browsers[browserName]).toBe(false);
+      }
+    })
+    .screenshot()
     .then(browsers => {
       for (const browserName in browsers) {
         fs.writeFileSync(
@@ -73,15 +73,15 @@ test("Кнопка “Отправить” заблокирована до те
         );
       }
     })
-  .setValue('#login','test123')
-  .setValue('#password','test123')
-  .isEnabled("#sendLoginForm")
-  .then(browsers => {
-    for (const browserName in browsers) {
-      expect(browsers[browserName]).toBe(true);
-    }
-  })
-  .screenshot()
+    .setValue("#login", "test123")
+    .setValue("#password", "test123")
+    .isEnabled("#sendLoginForm")
+    .then(browsers => {
+      for (const browserName in browsers) {
+        expect(browsers[browserName]).toBe(true);
+      }
+    })
+    .screenshot()
     .then(browsers => {
       for (const browserName in browsers) {
         fs.writeFileSync(
@@ -91,7 +91,7 @@ test("Кнопка “Отправить” заблокирована до те
         );
       }
     });
-})
+});
 
 afterAll(() => {
   return client.end();

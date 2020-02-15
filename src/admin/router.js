@@ -4,7 +4,7 @@ import login from "./components/login";
 import about from "./components/about";
 import myWorks from "./components/myWorks";
 import reviews from "./components/reviews";
-import store from "./store/index"
+import store from "./store/index";
 
 const router = new VueRouter({
   routes: [
@@ -34,12 +34,11 @@ const router = new VueRouter({
 async function isAuthentificated() {
   let result = false;
   if (localStorage.getItem("token")) {
-    await store.dispatch('setUser');
-    if (store.getters.user){
-      result = true
-    }
-    else{
-      result = false
+    await store.dispatch("setUser");
+    if (store.getters.user) {
+      result = true;
+    } else {
+      result = false;
     }
   } else {
     result = false;
@@ -57,16 +56,17 @@ router.beforeEach((to, from, next) => {
       }
     });
   } else {
-    isAuthentificated().then(result => {
-      if (result) {
-        next("/");
-      } else {
-        next();
-      }
-    })
-    .catch(e =>{
-      console.log(e);
-    });
+    isAuthentificated()
+      .then(result => {
+        if (result) {
+          next("/");
+        } else {
+          next();
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 });
 

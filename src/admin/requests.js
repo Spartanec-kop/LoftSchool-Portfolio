@@ -16,19 +16,21 @@ axios.interceptors.response.use(
       error.response.status === 401 &&
       error.response.data != "Передан не валидный токен"
     ) {
-      return axios.post("/refreshToken").then(response => {
-        const token = response.data.token;
+      return axios
+        .post("/refreshToken")
+        .then(response => {
+          const token = response.data.token;
 
-        localStorage.setItem("token", token);
-        axios.defaults.headers["Authorization"] = `Bearer ${token}`;
-        originRequest.headers["Authorization"] = `Bearer ${token}`;
+          localStorage.setItem("token", token);
+          axios.defaults.headers["Authorization"] = `Bearer ${token}`;
+          originRequest.headers["Authorization"] = `Bearer ${token}`;
 
-        return axios(originRequest);
-      })
-      .catch(e =>{
-        console.log(e);
-        return Promise.reject(error);
-      });
+          return axios(originRequest);
+        })
+        .catch(e => {
+          console.log(e);
+          return Promise.reject(error);
+        });
     }
     //return Promise.reject(error);
   }
