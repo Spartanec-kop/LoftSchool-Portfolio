@@ -1,28 +1,53 @@
-const fs = require('fs');
-const webdriverio = require('webdriverio');
-const options = require('../wdio.conf');
+const fs = require("fs");
+const webdriverio = require("webdriverio");
+const options = require("../wdio.conf");
 const client = webdriverio.multiremote(options);
 
 jest.setTimeout(30000);
 
 beforeAll(() => {
-    return client.init().url('http://localhost:8080/admin#/login');
+  return client.init().url("http://localhost:8080/admin#/login");
 });
 
-test('на странице есть кнопка "открыть"', () => {
-    return client
-        .isExisting('#sendLoginForm')
-        .then(browsers => {
-            for (const browserName in browsers) {
-                expect(browsers[browserName]).toBe(true);
-            }
-        })
-        .screenshot()
-        .then(browsers => {
-            for (const browserName in browsers) {
-                fs.writeFileSync(`./screenshots/overlay_${browserName}_has_open.png`, browsers[browserName].value, 'base64');
-            }
-        });
+test('На странице есть кнопка “Авторизоваться"', () => {
+  return client
+    .isExisting("#sendLoginForm")
+    .then(browsers => {
+      for (const browserName in browsers) {
+        expect(browsers[browserName]).toBe(true);
+      }
+    })
+    .screenshot()
+    .then(browsers => {
+      for (const browserName in browsers) {
+        fs.writeFileSync(
+          `./screenshots/overlay_${browserName}_has_open.png`,
+          browsers[browserName].value,
+          "base64"
+        );
+      }
+    });
+});
+
+test("Форма имеет все необходимые поля", () => {
+  return client
+    .isExisting("#login")
+    .isExisting("#password")
+    .then(browsers => {
+      for (const browserName in browsers) {
+        expect(browsers[browserName]).toBe(true);
+      }
+    })
+    .screenshot()
+    .then(browsers => {
+      for (const browserName in browsers) {
+        fs.writeFileSync(
+          `./screenshots/overlay_${browserName}_has_open.png`,
+          browsers[browserName].value,
+          "base64"
+        );
+      }
+    });
 });
 
 // test('при нажатии на "открыть" появляется оверлей', () => {
@@ -78,5 +103,5 @@ test('на странице есть кнопка "открыть"', () => {
 // });
 
 afterAll(() => {
-    return client.end();
+  return client.end();
 });

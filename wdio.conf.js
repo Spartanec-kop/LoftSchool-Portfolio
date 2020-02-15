@@ -10,12 +10,12 @@ const shared = {
     maxInstances: 1
 };
 
-// exports.firefox = {
-//     ...shared,
-//     desiredCapabilities: {
-//         browserName: 'firefox'
-//     }
-// };
+exports.firefox = {
+    ...shared,
+    desiredCapabilities: {
+        browserName: 'firefox'
+    }
+};
 
 exports.chrome = {
     ...shared,
