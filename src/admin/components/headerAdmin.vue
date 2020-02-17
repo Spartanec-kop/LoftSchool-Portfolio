@@ -7,49 +7,61 @@
         .header-text  
           .name Павел Варнавский
           .title Панель администратора
-          .logout Выйти
+          .logout(
+            @click="logout"
+          ) Выйти
 </template>
 
 <script>
 export default {
-  name: 'header',
-}
-
+  name: "header-admin",
+  methods: {
+    logout() {
+      this.$axios
+        .post("/logout")
+        .then(response => {
+          this.$router.push({ name: "login" });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
+};
 </script>
 <style lang="postcss" scoped>
-.header-admin{
+.header-admin {
   background-image: linear-gradient(to top, #3e3e59, #454573);
   color: #ffffff;
 }
 
-.header-wrapper{
+.header-wrapper {
   height: 80px;
   display: flex;
   justify-items: center;
-  
 }
-.avatar{
+.avatar {
   margin: auto 0;
 }
-.avatar-img{
+.avatar-img {
   width: 44px;
   height: 44px;
   border-radius: 50%;
 }
-.header-text{
+.header-text {
   display: flex;
   align-items: center;
   padding-left: 20px;
   width: 100%;
 }
 
-.name{
+.name {
   font-size: 18px;
   font-weight: 600;
   line-height: 1.89;
 }
 
-.title{
+.title {
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -57,7 +69,7 @@ export default {
   padding-left: 28px;
 }
 
-.logout{
+.logout {
   opacity: 0.7;
   font-size: 16px;
   font-weight: normal;
@@ -66,6 +78,7 @@ export default {
   line-height: 1.5;
   letter-spacing: normal;
   text-decoration: underline;
-  margin-left:auto;
+  margin-left: auto;
+  cursor: pointer;
 }
 </style>

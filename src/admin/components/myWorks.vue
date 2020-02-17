@@ -12,41 +12,51 @@
           .edit-works-title-text Редактирование работы
         hr  
         .edit-works-body
-          .import-image-wrapper 
+          .import-image-wrapper.tooltip
             .admin-preview(
-              v-if="currentWork.imageUrl"
+              v-if="currentWork.photo"
             )
-              img.admin-edit-image-img(                 
-                  :src="this.$importImg(`content/${currentWork.imageUrl}`)"
+              img.admin-edit-image-img#edit-img-preview(                 
+                  :src="this.$baseUrl + currentWork.photo"
                   )
-              .admin-preview-text  Изменить превью
+              .admin-preview-text(
+                @click="uploadImage"
+              )  Изменить превью
             .import-image(
-                v-if="!currentWork.imageUrl"
+                v-if="!currentWork.photo"
               )
               .import-image-content
                 .import-image-text
                   span Перетащите или загрузите
                   br
                   span для загрузки изображения
-                .fill-button-wrapper
+                .fill-button-wrapper(
+                  @click="uploadImage"
+                )
                   fill-button(
                     text="ЗАГРУЗИТЬ"
                   )
+            .input-tooltip(:class="{'showed':validation.hasError('currentWork.photo')}") {{validation.firstError('currentWork.photo')}}
+          input#work-photo(
+            type="file"
+            ref="workImage"
+            @change="changeImgFile"
+          )                 
           .works-description
             admin-input.name-work(
               :labelText="'Название'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
-              :id="'name-work'"
+              :isInvalid="validation.hasError('currentWork.title')"
+              :toolTipText="validation.firstError('currentWork.title')"
+              :id="'title-work'"
               :type="'input'"
-              :val="currentWork.name"
+              :val="currentWork.title"
               @change="nameChange"
             )
 
             admin-input.link-work(
               :labelText="'Ссылка'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
+              :isInvalid="validation.hasError('currentWork.link')"
+              :toolTipText="validation.firstError('currentWork.link')"
               :id="'link-work'"
               :type="'input'"
               :val="currentWork.link"
@@ -55,26 +65,26 @@
 
             admin-input.desc-work(
               :labelText="'Описание'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
+              :isInvalid="validation.hasError('currentWork.description')"
+              :toolTipText="validation.firstError('currentWork.description')"
               :id="'desc-work'"
               :type="'textarea'"
-              :val="currentWork.desc"
+              :val="currentWork.description"
               @change="descChange"
             )
 
             admin-input.tags-work(
               :labelText="'Добавление тэга'"
-              :isInvalid="false"
-              :toolTipText="'toolTipText'"
+              :isInvalid="validation.hasError('currentWork.techs')"
+              :toolTipText="validation.firstError('currentWork.techs')"
               :id="'tags-work'"
               :type="'input'"
-              :val="currentWork.tags.join(', ')"
+              :val="currentWork.techs"
               @change="tagsChange"
             )
             .admin-tags
               tag.edit-tag(
-                v-for="tag in currentWork.tags"
+                v-for="tag in currentWork.techs.split(',')"
                 :tag="tag"
                 :edit="true"
                 :key="currentWork.id + '_' + tag"
@@ -109,178 +119,195 @@
         )    
 </template>
 <script>
+import SimpleVueValidator from "simple-vue-validator";
+const Validator = SimpleVueValidator.Validator;
 
-import tag from './tag'
-import work from './work'
+import tag from "./tag";
+import work from "./work";
+import { mapActions, mapState } from "vuex";
 export default {
-  components:{tag, work},
-  name: 'myWorks',
-  data(){
-    return{
-      currentWork: null,
-      works:[
-        {
-          id:1,         
-          name: 'Сайт школы образования',
-          imageUrl: '1.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-
-        },
-        {
-          id:2,
-          name: 'Сайт школы образования',
-          imageUrl: '2.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-        {
-          id:3,
-          name: 'Сайт школы образования',
-          imageUrl: '3.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-        {
-          id:4,
-          name: 'Сайт школы образования',
-          imageUrl: '4.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-        {
-          id:5,
-          name: 'Сайт школы образования',
-          imageUrl: '5.jpg',
-          link:'http://loftschool.ru',
-          desc:'Этот парень проходил обучение веб-разработке не где-то, а в LoftSchool! 4,5 месяца только самых тяжелых испытаний и бессонных ночей!',
-          tags:['HTML','CSS', 'JavaScript']
-        },
-      ],
+  mixins: [SimpleVueValidator.mixin],
+  components: { tag, work },
+  name: "myWorks",
+  data() {
+    return {
+      currentWork: null
+    };
+  },
+  computed: {
+    ...mapState("works", {
+      works: state => state.works
+    })
+  },
+  validators: {
+    "currentWork.title"(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    "currentWork.description"(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    "currentWork.link"(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    "currentWork.techs"(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    "currentWork.photo"(value) {
+      return Validator.value(value).required("Нужно загрузить фото");
     }
   },
-  methods:{
-    removeTag(val){
-      let tags = [...this.currentWork.tags]
+  methods: {
+    ...mapActions("works", ["fetchWorks", "removeWork", "saveWork", "addWork"]),
+    removeTag(val) {
+      let tags = this.currentWork.techs.split(",");
       tags.forEach((element, i) => {
-        if(element == val){
+        if (element == val) {
           tags.splice(i, 1);
         }
-      this.currentWork.tags = tags;
+        this.currentWork.techs = tags.join(",");
       });
     },
-    nameChange(value){
-      this.currentWork.name = value;
+    uploadImage() {
+      this.$refs.workImage.click();
     },
-    linkChange(value){
+    changeImgFile(e) {
+      this.currentWork.photo = e.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function(event) {
+        var imgtag = document.getElementById("edit-img-preview");
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(this.currentWork.photo);
+    },
+    nameChange(value) {
+      this.currentWork.title = value;
+    },
+    linkChange(value) {
       this.currentWork.link = value;
     },
-    descChange(value){
-      this.currentWork.desc = value;
+    descChange(value) {
+      this.currentWork.description = value;
     },
-    tagsChange(value){
-      this.currentWork.tags = value.split(', ');
+    tagsChange(value) {
+      this.currentWork.techs = value;
     },
-    selectWork(work){
-      this.currentWork = {...work};
+    selectWork(work) {
+      this.currentWork = { ...work };
     },
-    removeWork(work){
-      this.works.splice(this.works.indexOf(work), 1);
-    },
-    cancelEdit(){
+    cancelEdit() {
       this.currentWork = null;
     },
-    saveEdit(){
-      if(!this.currentWork.id){
-        this.currentWork.id = this.works[this.works.length - 1].id + 1;
-        this.works.push(this.currentWork);
-      }
-      else{
-        let tmp = this.works.find(f => f.id == this.currentWork.id); 
-        this.works[this.works.indexOf(tmp)] = this.currentWork;
-      }
-      this.currentWork = null;
-    },
-    addNewWork(){
-      this.currentWork = {
-          id:null,         
-          name: '',
-          imageUrl: '',
-          link:'',
-          desc:'',
-          tags:[]
+    saveEdit() {
+      this.$validate().then(success => {
+        if (success) {
+          if (!this.currentWork.id) {
+            var formData = new FormData();
+            formData.append("title", this.currentWork.title);
+            formData.append("techs", this.currentWork.techs);
+            formData.append("photo", this.currentWork.photo);
+            formData.append("link", this.currentWork.link);
+            formData.append("description", this.currentWork.description);
 
-        };
+            this.addWork(formData);
+          } else {
+            var formData = new FormData();
+            formData.append("title", this.currentWork.title);
+            formData.append("techs", this.currentWork.techs);
+            formData.append("photo", this.currentWork.photo);
+            formData.append("link", this.currentWork.link);
+            formData.append("description", this.currentWork.description);
+
+            this.saveWork({ workId: this.currentWork.id, formData: formData });
+          }
+          this.currentWork = null;
+        }
+      });
+    },
+    addNewWork() {
+      this.currentWork = {
+        id: null,
+        title: "",
+        photo: null,
+        link: "",
+        description: "",
+        techs: ""
+      };
+      this.validation.reset();
     }
+  },
+  created() {
+    this.fetchWorks();
   }
-}
+};
 </script>
 <style lang="postcss" scoped>
-.works-wrapper{
+#work-photo {
+  display: none;
+}
+.works-wrapper {
   padding-bottom: 40px;
 }
-.title{
+.title {
   display: flex;
   align-items: center;
   padding: 20px 0;
 }
-.title-text{
+.title-text {
   font-size: 21px;
   font-weight: bold;
 }
-.edit-works{
+.edit-works {
   padding: 30px;
   background-color: white;
   box-shadow: 4.1px 2.9px 20px 0 rgba(0, 0, 0, 0.07);
 }
-.edit-works-title{
+.edit-works-title {
   padding-bottom: 25px;
   padding-left: 10px;
   font-size: 18px;
   font-weight: bold;
   line-height: 1.89;
 }
-hr{
+hr {
   opacity: 0.15;
 }
-.edit-works-body{
+.edit-works-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 30px;
   padding-top: 45px;
 }
 .import-image,
-.works-description{
-  padding:10px;
+.works-description {
+  padding: 10px;
 }
-.admin-preview-text{
+.admin-preview-text {
   font-size: 16px;
   font-weight: 600;
   line-height: 2.13;
   color: #383bcf;
   text-align: center;
   padding-top: 30px;
+  cursor: pointer;
 }
 .import-image-wrapper {
   width: 100%;
   padding: 10px;
 }
-.import-image{
+.import-image {
   background-color: #dee4ed;
   background-image: url("data:image/svg+xml;utf8,<svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill: none; stroke: darkgrey; stroke-width: 2; stroke-dasharray: 10 10'/></svg>");
   position: relative;
-  width: 100%; 
+  width: 100%;
 }
-.import-image{
+.import-image {
   display: block;
-  padding-top: 56%;    
+  padding-top: 56%;
 }
-.import-image-content{
-  position:  absolute;
+.import-image-content {
+  position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
@@ -290,147 +317,147 @@ hr{
   justify-content: center;
   text-align: center;
 }
-.import-image-text{
+.import-image-text {
   opacity: 0.5;
   font-size: 16px;
   font-weight: 600;
   line-height: 2.13;
 }
-.fill-button-wrapper{
+.fill-button-wrapper {
   width: 181px;
   height: 50px;
   margin: 0 auto;
   margin-top: 27px;
 }
-.admin-input{
-  &:nth-child(4){
+.admin-input {
+  &:nth-child(4) {
     margin-bottom: 0px;
   }
 }
-.admin-tags{
+.admin-tags {
   display: flex;
   padding-top: 20px;
 }
-.edit-tag{
+.edit-tag {
   margin-right: 10px;
-  &:last-child{
+  &:last-child {
     margin-right: 0px;
   }
 }
-.desc-work{
-  height:190px;
+.desc-work {
+  height: 190px;
 }
-.edit-works-buttons{
+.edit-works-buttons {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding-top: 40px;
 }
-.edit-works-cancel{
+.edit-works-cancel {
   font-weight: 600;
   line-height: 2.13;
   color: #383bcf;
   padding-right: 60px;
   cursor: pointer;
 }
-.edit-works-save{
+.edit-works-save {
   height: 60px;
-  width: 180px
+  width: 180px;
 }
-.works-list{
+.works-list {
   display: grid;
   padding-top: 30px;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 30px;
   row-gap: 30px;
 }
-.works-list-item{
+.works-list-item {
   box-shadow: 4.1px 2.9px 20px 0 rgba(0, 0, 0, 0.07);
   background-color: white;
 }
-.add-new-work{
+.add-new-work {
   background-image: linear-gradient(to right, #006aed, #3f35cb);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   cursor: pointer;
+  padding: 40px 0;
 }
-.plus{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 95px;
-    height: 95px;
-    font-weight: 600;
-    line-height: 1;
-    color: #ffffff;
-    background: transparent;
-    border-radius: 50%;
-    border: 2px solid white;  
-    cursor: pointer;  
-    font-size: 72px;
-    font-weight: 300;
-  }
+.plus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95px;
+  height: 95px;
+  font-weight: 600;
+  line-height: 1;
+  color: #ffffff;
+  background: transparent;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  font-size: 72px;
+  font-weight: 300;
+}
 
-.add-new-work-text{
+.add-new-work-text {
   font-size: 18px;
   font-weight: bold;
   line-height: 1.67;
   text-align: center;
   color: #ffffff;
   padding-top: 30px;
-
 }
-.add-new-work-text span{
-      display: block;
-    }
+.add-new-work-text span {
+  display: block;
+}
 
 @media screen and (max-width: 768px) {
-  .edit-works-body{
+  .edit-works-body {
     grid-template-columns: 1fr;
     column-gap: 30px;
     max-width: 470px;
     margin: 0 auto;
   }
-  .edit-works-buttons{
+  .edit-works-buttons {
     justify-content: center;
   }
-  .works-list{
+  .works-list {
     grid-template-columns: 1fr 1fr;
   }
-}  
+}
 
 @media screen and (max-width: 500px) {
-  .works-list{
+  .works-list {
     display: grid;
     grid-template-columns: 1fr;
   }
-  .add-new-work{
+  .add-new-work {
     height: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
   }
-  .add-new-work-text{
+  .add-new-work-text {
     padding-top: 0px;
     padding-left: 20px;
   }
-  .add-new-work-text span{
+  .add-new-work-text span {
     display: inline;
-    &:last-child{
-      &::before{
-        content: ' ';
+    &:last-child {
+      &::before {
+        content: " ";
       }
     }
   }
-  .plus{
+  .plus {
     width: 50px;
     height: 50px;
     font-size: 24px;
   }
-  .container{
+  .container {
     width: 100%;
   }
 }

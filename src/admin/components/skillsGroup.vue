@@ -1,13 +1,15 @@
 <template lang="pug">
   .skillGroup
     .group-title
-      .group-title-input(:class="editTitle ? 'input-edited' : '' ")
+      .group-title-input.tooltip(:class="editTitle ? 'input-edited' : '' ")
         input.skill-group-name-input(
           placeholder="Название новой группы"
-          :value="skillGroup.name"
+          
           :readOnly="editTitleComputed ? false : true"
+          v-model="categoryTitleValue"
           ref="skillGroupName"
           )
+        .input-tooltip(:class="{'showed':validation.hasError('categoryTitleValue')}") {{validation.firstError('categoryTitleValue')}}  
       .button-set
         .edit-buttons(
           v-if="editTitleComputed"
@@ -16,7 +18,7 @@
             @click="editSkillGroupName"
           ) &#10004;
           .cancel(
-            @click="cancelEdit"
+            @click="removeCategory(category)"
           ) &#215;
         .edit(
             @click="editTitle = !editTitle"
@@ -27,19 +29,19 @@
     hr.spliter
     .group-body
       skill(
-        v-for="(item, i) in skillGroup.skills"
+        v-for="(item, i) in category.skills"
         :skill="item"
         :key="`${item.name}_${i}`"
         :iterator="i"
-        @removeSkill="removeSkill"
-        )
+        ) 
     .add-skill
       .new-skill
-        input.skill-name-input(
-          placeholder="Новый навык"
-          ref="newSkillName"
-          )
-        
+        .new-skill-wrapper.tooltip
+          input.skill-name-input(
+            placeholder="Новый навык"
+            ref="newSkillName"
+            )
+          .input-tooltip(:class="{'showed':showNewSkillError}") {{'Поле не должно быть пустым'}}
       .new-count
         input.skill-count-input(
             :value="100"
@@ -52,70 +54,98 @@
         plus
 </template>
 <script>
-import skill from './skill'
+import SimpleVueValidator from "simple-vue-validator";
+import { mapActions } from "vuex";
+const Validator = SimpleVueValidator.Validator;
+
+import skill from "./skill";
 export default {
-  components:{skill},
-  name: 'skillsGroup',
-  props:{
-    skillGroup:Object
+  mixins: [SimpleVueValidator.mixin],
+  components: { skill },
+  name: "skillsGroup",
+  props: {
+    category: Object
   },
   data() {
-    return{
+    return {
       editTitle: false,
+      categoryTitleValue: this.category.category,
+      showNewSkillError: false
+    };
+  },
+  computed: {
+    editTitleComputed() {
+      return this.editTitle || this.category.category.length == 0;
     }
   },
-  computed:{
-    editTitleComputed(){
-      return this.editTitle || this.skillGroup.name.length == 0
+  validators: {
+    categoryTitleValue(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
     }
   },
-  methods:{
-    editSkillGroupName(){
-      this.skillGroup.name = this.$refs.skillGroupName.value;
-      this.editTitle = false;
+  methods: {
+    ...mapActions("about", [
+      "removeCategory",
+      "addCategory",
+      "renameCategory",
+      "addSkillAction"
+    ]),
+    editSkillGroupName() {
+      this.$validate().then(success => {
+        if (success) {
+          if (!this.category.id) {
+            this.addCategory({ title: this.$refs.skillGroupName.value });
+          } else {
+            this.renameCategory({
+              category: this.category,
+              title: this.$refs.skillGroupName.value
+            });
+          }
+          this.editTitle = false;
+        }
+      });
     },
-    addSkill(){
-      this.skillGroup.skills.push({
-        title: this.$refs.newSkillName.value,
-        count: this.$refs.newSkillCount.value,
-      })
-      this.$refs.newSkillName.value = "";
-      this.$refs.newSkillCount.value = 100;
-    },
-    cancelEdit(){
-      this.editTitle = false;
-    },
-    removeSkill(skill){
-      this.skillGroup.skills.splice(this.skillGroup.skills.indexOf(skill), 1);
+    addSkill() {
+      if (this.$refs.newSkillName.value != "") {
+        this.addSkillAction({
+          title: this.$refs.newSkillName.value,
+          percent: this.$refs.newSkillCount.value,
+          category: this.category.id
+        });
+        this.$refs.newSkillName.value = "";
+        this.$refs.newSkillCount.value = 100;
+        this.showNewSkillError = false;
+      } else {
+        this.showNewSkillError = true;
+      }
     }
   }
-}
+};
 </script>
 <style lang="postcss" scoped>
-.skillGroup{
+.skillGroup {
   position: relative;
-  padding:20px;
+  padding: 20px;
   background-color: white;
 }
-.group-title{
+.group-title {
   display: flex;
   justify-content: space-between;
   padding-left: 10px;
 }
 
-.group-title-input{
-  
-  width: 60%;  
+.group-title-input {
+  width: 60%;
 }
-  .input-edited{
-    border-bottom: 1px solid;
+.input-edited {
+  border-bottom: 1px solid;
 }
 
-.button-set{
+.button-set {
   display: flex;
   align-items: center;
 }
-.skill-group-name-input{
+.skill-group-name-input {
   background-color: transparent;
   border-color: transparent;
   width: 100%;
@@ -123,30 +153,29 @@ export default {
   font-weight: 600;
   line-height: 1.89;
 }
-.edit-buttons{
+.edit-buttons {
   display: flex;
   align-items: center;
 }
-.edit{
+.edit {
   padding-right: 22px;
   cursor: pointer;
 }
 
-.skill-icon{
+.skill-icon {
   width: 15px;
   height: 15px;
-  fill:#a0a5b1;
+  fill: #a0a5b1;
 }
 
-.spliter{
+.spliter {
   opacity: 0.15;
 }
-
-.group-body{
+.group-body {
   padding-bottom: 140px;
 }
 
-.apply{
+.apply {
   color: #00d70a;
   font-size: 20px;
   font-weight: 900;
@@ -154,7 +183,7 @@ export default {
   line-height: 0.5;
   cursor: pointer;
 }
-.cancel{
+.cancel {
   color: #bf2929;
   font-size: 30px;
   font-weight: 900;
@@ -162,30 +191,28 @@ export default {
   padding-right: 10px;
   cursor: pointer;
 }
-.add-skill{
+.add-skill {
   position: absolute;
   right: 31px;
   bottom: 31px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  /* padding-top: 70px; */
 }
 
-.new-skill{
+.new-skill {
   display: flex;
   margin-right: 10px;
-  width:45%;
   justify-content: flex-end;
   height: 100%;
   border-bottom: 1px solid;
 }
 .skill-name-input,
-.skill-count-input{
-  width:100%;
+.skill-count-input {
+  width: 100%;
 }
 
-.new-count{
+.new-count {
   display: flex;
   width: 55px;
   height: 100%;
@@ -194,7 +221,7 @@ export default {
 }
 .skill-name-input,
 .skill-count-input,
-.percent{
+.percent {
   font-size: 16px;
   font-weight: 600;
   color: #a0a5b1;
@@ -203,10 +230,10 @@ export default {
   line-height: 2;
 }
 
-.plus-wrapper{
+.plus-wrapper {
   width: 40px;
   height: 40px;
   font-size: 30px;
-  font-weight: 600; 
+  font-weight: 600;
 }
 </style>

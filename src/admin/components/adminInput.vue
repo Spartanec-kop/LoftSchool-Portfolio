@@ -1,6 +1,6 @@
 <template lang="pug">
 .admin-input.tooltip(
-    :class="{'.admin-input__error':isInvalid}") 
+    :class="{'admin-input__error':isInvalid}") 
   label.admin-input-label(:for="id") {{labelText}}   
   .admin-input-wrapper       
     input.admin-input-input(
@@ -20,51 +20,50 @@
 </template>
 <script>
 export default {
-  name: 'admin-input',
-  props:['labelText', 'isInvalid', 'toolTipText', 'id', 'type', 'val', 'text'],
-  data(){
+  name: "admin-input",
+  props: ["labelText", "isInvalid", "toolTipText", "id", "type", "val", "text"],
+  data() {
     return {
-      tooltipText:'',
-      value:'',
+      tooltipText: "",
+      value: "",
       focus: false
-    }
+    };
   },
-  methods:{
-  },
-  mounted(){
+  methods: {},
+  mounted() {
     this.value = this.val;
   },
   watch: {
-    val: function (newQuestion, oldQuestion) {
+    val: function(newQuestion, oldQuestion) {
       this.value = this.val;
     }
-  },
-}
+  }
+};
 </script>
-<style lang="postcss" scoped>
-
-.admin-input{
+<style lang="postcss">
+.admin-input {
   border-bottom: 1px solid black;
-  width:100%;
+  width: 100%;
   margin-bottom: 30px;
-  &:hover{
-      border-bottom: 1px solid $links-color;
-      fill: $links-color;
-      color: $links-color;
-    }  
+  &:hover {
+    border-bottom: 1px solid $links-color;
+    fill: $links-color;
+    color: $links-color;
+  }
 }
-.admin-input-label{
+
+.admin-input-label {
   opacity: 0.5;
   font-size: 16px;
   font-weight: 600;
 }
 
-.admin-input-wrapper{
+.admin-input-wrapper {
   padding: 10px 0;
-  height:100%;
+  height: 100%;
 }
 .admin-input-input,
-.admin-input-textarea{
+.admin-input-textarea {
   width: 100%;
   font-size: 16px;
   font-weight: 600;
@@ -73,58 +72,58 @@ export default {
   border-color: transparent;
 }
 
-.admin-input-textarea{
+.admin-input-textarea {
   height: 80%;
   line-height: 1.88;
   border: 1px solid #dee4ed;
   padding: 20px;
 }
 
-.admin-input__focus{
+.admin-input__focus {
   border-bottom: 1px solid $links-color;
   fill: $links-color;
   color: $links-color;
 }
 
-.admin-input__error{
+.admin-input__error {
   border-bottom: 1px solid red;
   fill: red;
 }
 
 /* Tooltip container */
 .tooltip {
-    position: relative;
-    display: inline-block;
-    visibility: visible;
+  position: relative;
+  display: inline-block;
+  visibility: visible;
 }
-.input-tooltip{
+.input-tooltip {
   visibility: hidden;
 }
 /* Tooltip text */
 .tooltip .input-tooltip {
-    width: 80%;
-    background-color: red;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
+  width: 80%;
+  background-color: red;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
- .showed {
-    visibility: visible;
+.showed {
+  visibility: visible;
 }
 
 .tooltip .input-tooltip::after {
-    content: " ";
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent red transparent;
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent red transparent;
 }
 </style>

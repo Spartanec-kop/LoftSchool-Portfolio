@@ -1,5 +1,6 @@
 <template lang="pug">
-  .admin-skill
+  .admin-skill.tooltip
+    .input-tooltip(:class="{'showed':showError}") {{'не все поля заполнены'}}
     .name(:class="edit ? 'input-edited' : '' ")
       input.skill-name-input(
           :value="skill.title"
@@ -9,7 +10,7 @@
     .count-button  
       .count(:class="edit ? 'input-edited' : '' ")
         input.skill-count-input(
-            :value="skill.count"
+            :value="skill.percent"
             :readOnly="edit ? false : true"
             :ref="`skill-count__${iterator}`"
             )
@@ -33,37 +34,56 @@
             svg.skill-icon
               use(:xlink:href="this.$importSvg('pencil')")
           .remove(
-            @click="$emit('removeSkill', skill)"
+            @click="removeSkill(skill)"
           )
             svg.skill-icon
-              use(:xlink:href="this.$importSvg('trash')")
+              use(:xlink:href="this.$importSvg('trash')")          
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
-  name: 'skill',
-  props:{
+  name: "skill",
+  props: {
     skill: Object,
-    iterator:Number
+    iterator: Number
   },
-  data(){
-    return{
-      edit: false
-    }
+  data() {
+    return {
+      edit: false,
+      showError: false
+    };
   },
-  methods:{
-    editSkill(){
-      this.skill.title = this.$refs[`skill-name__${this.iterator}`].value;
-      this.skill.count = this.$refs[`skill-count__${this.iterator}`].value;
-      this.edit = false;
+  methods: {
+    ...mapActions("about", ["removeSkill", "editSkillAction"]),
+    editSkill() {
+      if (
+        this.$refs[`skill-name__${this.iterator}`].value != "" &&
+        this.$refs[`skill-count__${this.iterator}`].value != ""
+      ) {
+        this.editSkillAction({
+          title: this.$refs[`skill-name__${this.iterator}`].value,
+          percent: this.$refs[`skill-count__${this.iterator}`].value,
+          category: this.skill.category,
+          id: this.skill.id
+        });
+        this.edit = false;
+        this.showError = false;
+      } else {
+        this.showError = true;
+      }
     },
-    cancelEdit(){
+    cancelEdit() {
       this.edit = false;
+      this.showError = false;
     }
   }
-}
+};
 </script>
 <style lang="postcss" scoped>
-.admin-skill{
+.input-tooltip {
+  bottom: -100%;
+}
+.admin-skill {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -71,81 +91,81 @@ export default {
   padding-right: 0px;
 }
 
-.default-buttons{
+.default-buttons {
   display: flex;
 }
-.edit-buttons{
+.edit-buttons {
   display: flex;
   align-items: center;
 }
 
-.name{
+.name {
   width: 60%;
   margin-right: 20px;
 }
 
-.skill-name-input{
+.skill-name-input {
   background-color: transparent;
   border-color: transparent;
-  width:100%;
+  width: 100%;
 }
 
-.count-button{
+.count-button {
   width: 40%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.count{
+.count {
   display: flex;
   align-items: center;
   width: 60px;
   padding-right: 10px;
 }
 
-.skill-count-input{
-  width:100%;
+.skill-count-input {
+  width: 100%;
   background-color: transparent;
   border-color: transparent;
 }
-.percent{
-  font-size: 16px;   
+.percent {
+  font-size: 16px;
 }
 
 .skill-name-input,
 .skill-count-input,
-.percent{
+.percent {
   font-size: 16px;
   line-height: 2;
   font-weight: 600;
   color: #a0a5b1;
 }
-.input-edited{
+.input-edited {
   border-bottom: 1px solid;
 }
-.skill-icon{
+.skill-icon {
   width: 15px;
   height: 15px;
-  fill:#a0a5b1;
+  fill: #a0a5b1;
 }
 
-.edit{
+.edit {
   padding-right: 22px;
   cursor: pointer;
 }
-.remove{
+.remove {
   padding-right: 10px;
   cursor: pointer;
 }
 
-.apply{
+.apply {
   color: #00d70a;
   font-size: 20px;
   font-weight: 900;
   padding-right: 20px;
   cursor: pointer;
 }
-.cancel{
+.cancel {
   color: #bf2929;
   font-size: 30px;
   font-weight: 900;
@@ -155,13 +175,12 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-  .name{
+  .name {
     width: 50%;
   }
 
-  .count-button{
+  .count-button {
     width: 50%;
   }
 }
-
 </style>

@@ -30,77 +30,89 @@ div
             :toolTipText="validation.firstError('password')"
             @change="changePassword"
           )
-          button.button-wrapper 
+          button.button-wrapper#sendLoginForm(
+            :class="disableButton() ? 'buttonDisabled' : '' "
+            :disabled="disableButton()"
+          )
             span ОТПРАВИТЬ
 </template>
 <script>
-import SimpleVueValidator from 'simple-vue-validator';
+import SimpleVueValidator from "simple-vue-validator";
 const Validator = SimpleVueValidator.Validator;
 
-import imputValidate from '../../component/input-validate'
+import imputValidate from "../../component/input-validate";
 export default {
   mixins: [SimpleVueValidator.mixin],
-  components:{'imput-validate': imputValidate},
-  name: 'login',
-  data(){
-    return{
-      login:'',
-      password:''
+  components: { "imput-validate": imputValidate },
+  name: "login",
+  data() {
+    return {
+      login: "",
+      password: ""
+    };
+  },
+  computed: {},
+  validators: {
+    login: function(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
+    },
+    password: function(value) {
+      return Validator.value(value).required("Поле не должно быть пустым");
     }
   },
-  validators:{
-    login:function(value){
-      return Validator.value(value).required('Поле не должно быть пустым');
+  methods: {
+    disableButton() {
+      return (
+        (this.validation.hasError("password") ||
+        this.validation.hasError("login")) || this.validation.passedRecords.length < 2
+      );
     },
-    password:function(value){
-      return Validator.value(value).required('Поле не должно быть пустым');
-    },
-  },
-  methods:{
-    changeLogin(val){
+    changeLogin(val) {
       this.login = val;
     },
-    changePassword(val){
+    changePassword(val) {
       this.password = val;
     },
-    submit(){
-      var self = this;
-      this.$validate()
-        .then(function (success) {
-          if (success) {
-           self.$axios.post('/login', {
-             name:self.login,
-             password: self.password
-           })
-           .then(response => {
-             localStorage.setItem('token', response.data.token);
-             self.$token = response.data.token;
-             document.location.href = "admin#";
-           })
-           .catch(error => {
-             console.log(error.response.data)
-           })
-          }
-        });
+    submit() {
+      this.$validate().then(async success => {
+        if (success) {
+          this.$axios
+            .post("/login", {
+              name: this.login,
+              password: this.password
+            })
+            .then(response => {
+              localStorage.setItem("token", response.data.token);
+              this.$token = response.data.token;
+              this.$axios.defaults.headers[
+                "Authorization"
+              ] = `Bearer ${response.data.token}`;
+              this.$router.push({ name: "about" });
+            })
+            .catch(error => {
+              console.log(error.response);
+            });
+        }
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="postcss" scoped>
-.title{
+.title {
   padding-bottom: 40px;
-  text-align:center;
+  text-align: center;
   font-size: 36px;
   font-weight: 600;
   line-height: 1.67;
 }
-.login-wrapper{
+.login-wrapper {
   height: 100vh;
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   z-index: 10;
 }
 .login-exit {
@@ -112,22 +124,22 @@ export default {
   margin-right: 30px;
   cursor: pointer;
 }
-.login-body{
+.login-body {
   width: 563px;
   height: 517px;
   background-color: #ffffff;
 }
-.login-input{
-  width:100%;
+.login-input {
+  width: 100%;
   margin-bottom: 40px;
 }
-.form-wrapper{
+.form-wrapper {
   height: 100%;
   max-width: 440px;
   text-align: left;
   margin: 0 auto;
 }
-.button-wrapper{
+.button-wrapper {
   display: flex;
   width: 347px;
   height: 80px;
@@ -140,8 +152,8 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 40px 0;
-  cursor:pointer;
-  &:hover{
+  cursor: pointer;
+  &:hover {
     background-image: linear-gradient(to left, #ad00ed, #5500f2);
   }
 }
@@ -155,5 +167,12 @@ export default {
   background-color: black;
   opacity: 0.6;
   z-index: -1;
+}
+.buttonDisabled {
+  opacity: 0.5;
+  cursor: default;
+  &:hover {
+    background-image: linear-gradient(to right, #ad00ed, #5500f2);
+  }
 }
 </style>

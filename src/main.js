@@ -3,6 +3,9 @@ if (process.env.NODE_ENV === "development") {
   require("file-loader!./index.pug");
 }
 
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+
 import "./scripts/parallax";
 
 import Vue from 'vue';

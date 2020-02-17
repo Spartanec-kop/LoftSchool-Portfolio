@@ -15,7 +15,7 @@ export default {
   },
   computed:{
     strokeDasharray(){
-      return `${this.skill.skillCount} ${100 - this.skill.skillCount}`
+      return `${this.skill.percent} ${100 - this.skill.percent}`
     }
   }
 }
