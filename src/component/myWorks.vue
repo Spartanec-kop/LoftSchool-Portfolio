@@ -96,11 +96,15 @@ export default {
         }
         else if (this.fourthMessage()) {
           if (this.lastPreview.length == 0){
-            this.lastPreview = [this.works[indexActiveItem],
-                                this.works[indexActiveItem + 1],
-                                this.works[indexActiveItem + 2],
-                                this.works[indexActiveItem + 3]
-                                ]                   
+            // this.lastPreview = [this.works[indexActiveItem],
+            //                     this.works[indexActiveItem + 1],
+            //                     this.works[indexActiveItem + 2],
+            //                     this.works[indexActiveItem + 3]
+            //                     ]   
+            this.works[indexActiveItem ] ? this.lastPreview.push(this.works[indexActiveItem]) : ''
+            this.works[indexActiveItem + 1] ? this.lastPreview.push(this.works[indexActiveItem + 1])  : ''
+            this.works[indexActiveItem + 2] ? this.lastPreview.push(this.works[indexActiveItem + 2])  : ''
+            this.works[indexActiveItem + 3] ? this.lastPreview.push(this.works[indexActiveItem + 3]) : ''
             return this.lastPreview
           }
           else{
@@ -178,7 +182,7 @@ export default {
         }
 
         if (this.fourthMessage()){
-          if (this.lastPreview[3].id == this.activeItem.id){
+          if (this.lastPreview[3] && this.lastPreview[3].id == this.activeItem.id){
             newPreview = [this.works[this.works.indexOf(this.activeItem)-2],
                           this.works[this.works.indexOf(this.activeItem)-1],
                           this.works[this.works.indexOf(this.activeItem)],

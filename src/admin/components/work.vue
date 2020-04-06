@@ -83,6 +83,8 @@ export default {
   font-weight: 600;
   line-height: 1.88;
   padding-top: 30px;
+  max-height: 200px;
+  overflow-x: auto;
 }
 .admin-work-link {
   padding-top: 30px;
